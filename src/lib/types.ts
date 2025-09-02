@@ -34,3 +34,8 @@ export interface WeatherData {
   weatherAlerts: string[];
   news: NewsArticle[];
 }
+
+export interface Location {
+  name: string;
+  country: string;
+}

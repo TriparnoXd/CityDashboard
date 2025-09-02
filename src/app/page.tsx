@@ -9,13 +9,10 @@ import HourlyForecast from '@/components/weather/hourly-forecast'
 import DailyForecast from '@/components/weather/daily-forecast'
 import WeatherSummary from '@/components/weather/weather-summary'
 import WeatherNews from '@/components/weather/weather-news'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Search } from 'lucide-react'
+import LocationSearch from '@/components/weather/location-search'
 
 export default function Home() {
   const [location, setLocation] = React.useState('London')
-  const [inputValue, setInputValue] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
 
@@ -24,9 +21,8 @@ export default function Home() {
     setWeatherData(data)
   }, [location])
 
-  const handleLocationChange = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLocation(inputValue);
+  const handleLocationSelect = (newLocation: string) => {
+    setLocation(newLocation);
   };
 
   if (!weatherData) {
@@ -44,17 +40,10 @@ export default function Home() {
           Clear Sky
         </h1>
         <div className="flex items-center gap-4">
-          <form onSubmit={handleLocationChange} className="flex gap-2">
-            <Input 
-              placeholder="Enter a location" 
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="w-[140px] sm:w-[180px]"
-            />
-            <Button type="submit" size="icon" variant="outline">
-              <Search className="h-4 w-4" />
-            </Button>
-          </form>
+          <LocationSearch 
+            selectedLocation={location}
+            onLocationSelect={handleLocationSelect}
+          />
           <UnitToggle unit={unit} setUnit={setUnit} />
         </div>
       </header>
