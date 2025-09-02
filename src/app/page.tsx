@@ -67,24 +67,24 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="grid grid-cols-1 gap-6 p-4 md:grid-cols-3 md:p-8 lg:grid-cols-4">
-        <div className="md:col-span-2 lg:col-span-3">
+      <main className="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 md:p-8">
+        <div className="lg:col-span-2 xl:col-span-3">
           <CurrentConditions data={weatherData.current} unit={unit} location={location} />
         </div>
 
-        <div className="md:col-span-1 lg:col-span-1">
+        <div className="lg:col-span-2 xl:col-span-2">
           <DailyForecast data={weatherData.dailyForecast} unit={unit} />
         </div>
         
-        <div className="md:col-span-3 lg:col-span-4">
+        <div className="md:col-span-2 lg:col-span-4 xl:col-span-5">
           <HourlyForecast data={weatherData.hourlyForecast} unit={unit} />
         </div>
 
-        <div className="md:col-span-3 lg:col-span-2">
+        <div className="md:col-span-1 lg:col-span-2 xl:col-span-2">
            <WeatherSummary weatherData={weatherData} />
         </div>
         
-        <div className="md:col-span-3 lg:col-span-2">
+        <div className="md:col-span-1 lg:col-span-2 xl:col-span-3">
             <WeatherNews news={weatherData.news} />
         </div>
 
