@@ -15,7 +15,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, locat
   const temp = convertTemperature(data.temperature, unit);
 
   return (
-    <Card className="bg-card/70 backdrop-blur-sm transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer">
+    <Card className="bg-card/70 backdrop-blur-sm transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-primary/30 cursor-pointer">
       <CardContent className="flex flex-col items-center justify-between p-6 sm:flex-row">
         <div className="flex items-center">
           <WeatherIcon condition={data.weatherConditions} className="mr-6 h-24 w-24 text-primary" />
