@@ -32,7 +32,7 @@ const GenerateWeatherSummaryInputSchema = z.object({
 export type GenerateWeatherSummaryInput = z.infer<typeof GenerateWeatherSummaryInputSchema>;
 
 const GenerateWeatherSummaryOutputSchema = z.object({
-  summary: z.string().describe('A concise summary of the weather forecast.'),
+  summary: z.string().describe('A concise summary of the weather forecast in points and phrases.'),
 });
 export type GenerateWeatherSummaryOutput = z.infer<typeof GenerateWeatherSummaryOutputSchema>;
 
@@ -44,7 +44,7 @@ const generateWeatherSummaryPrompt = ai.definePrompt({
   name: 'generateWeatherSummaryPrompt',
   input: {schema: GenerateWeatherSummaryInputSchema},
   output: {schema: GenerateWeatherSummaryOutputSchema},
-  prompt: `Summarize the weather forecast based on the following information:\n\nCurrent Conditions:\nTemperature: {{temperature}}°C\nHumidity: {{humidity}}%\nWind Speed: {{windSpeed}} km/h\nConditions: {{weatherConditions}}\n\nHourly Forecast:\n{{#each hourlyForecast}}\n  {{time}}: {{temperature}}°C, {{weatherConditions}}\n{{/each}}\n\nDaily Forecast:\n{{#each dailyForecast}}\n  {{day}}: High {{highTemperature}}°C, Low {{lowTemperature}}°C, {{weatherConditions}}\n{{/each}}\n\n{{#if weatherAlerts}}\n  Weather Alerts:\n  {{#each weatherAlerts}}\n    - {{this}}\n  {{/each}}\n{{/if}}\n\nWrite a concise and easy-to-understand summary.`,
+  prompt: `Summarize the weather forecast based on the following information:\n\nCurrent Conditions:\nTemperature: {{temperature}}°C\nHumidity: {{humidity}}%\nWind Speed: {{windSpeed}} km/h\nConditions: {{weatherConditions}}\n\nHourly Forecast:\n{{#each hourlyForecast}}\n  {{time}}: {{temperature}}°C, {{weatherConditions}}\n{{/each}}\n\nDaily Forecast:\n{{#each dailyForecast}}\n  {{day}}: High {{highTemperature}}°C, Low {{lowTemperature}}°C, {{weatherConditions}}\n{{/each}}\n\n{{#if weatherAlerts}}\n  Weather Alerts:\n  {{#each weatherAlerts}}\n    - {{this}}\n  {{/each}}\n{{/if}}\n\nWrite a concise and easy-to-understand summary using bullet points and short phrases.`,
 });
 
 const generateWeatherSummaryFlow = ai.defineFlow(
