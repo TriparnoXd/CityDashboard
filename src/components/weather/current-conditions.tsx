@@ -18,7 +18,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, locat
   return (
     <Card className="bg-card/70 backdrop-blur-sm transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-primary/30 cursor-pointer overflow-hidden">
       <CardContent className="p-0">
-        <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="grid grid-cols-1">
           <div className="flex flex-col justify-between p-6">
             <div className="flex items-start">
               <WeatherIcon condition={data.weatherConditions} className="mr-6 h-24 w-24 text-primary" />
@@ -45,7 +45,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, locat
               </div>
             </div>
           </div>
-          <div className="relative h-48 md:h-full">
+          <div className="relative h-64 w-full">
             <Image 
               src="https://picsum.photos/600/400" 
               alt="Weather image" 
