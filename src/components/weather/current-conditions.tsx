@@ -52,7 +52,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, locat
               src={imageUrl}
               alt={`Image of ${location}`} 
               fill
-              className="object-cover"
+              className="object-cover object-center"
               data-ai-hint={aiHint}
               key={imageUrl}
             />
