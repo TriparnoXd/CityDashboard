@@ -69,7 +69,7 @@ export default function Home() {
 
       <main className="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 md:p-8">
         <div className="lg:col-span-2 xl:col-span-3">
-          <CurrentConditions data={weatherData.current} unit={unit} location={location} />
+          <CurrentConditions data={weatherData.current} unit={unit} location={location} imageUrl={weatherData.imageUrl} />
         </div>
 
         <div className="lg:col-span-2 xl:col-span-2">

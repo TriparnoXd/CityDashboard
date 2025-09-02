@@ -10,10 +10,12 @@ interface CurrentConditionsProps {
   data: CurrentWeather;
   unit: Unit;
   location: string;
+  imageUrl: string;
 }
 
-const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, location }) => {
+const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, location, imageUrl }) => {
   const temp = convertTemperature(data.temperature, unit);
+  const aiHint = location.split(',')[0].toLowerCase().replace(' ', '');
 
   return (
     <Card className="bg-card/70 backdrop-blur-sm transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-primary/30 cursor-pointer overflow-hidden">
@@ -47,11 +49,12 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, locat
           </div>
           <div className="relative h-64 w-full">
             <Image 
-              src="https://picsum.photos/600/400" 
-              alt="Weather image" 
+              src={imageUrl}
+              alt={`Image of ${location}`} 
               fill
               className="object-cover"
-              data-ai-hint="weather"
+              data-ai-hint={aiHint}
+              key={imageUrl}
             />
           </div>
         </div>

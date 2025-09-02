@@ -33,6 +33,7 @@ export interface WeatherData {
   dailyForecast: DailyForecastItem[];
   weatherAlerts: string[];
   news: NewsArticle[];
+  imageUrl: string;
 }
 
 export interface Location {

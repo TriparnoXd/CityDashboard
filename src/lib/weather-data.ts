@@ -30,7 +30,8 @@ const londonData: WeatherData = {
   news: [
     { title: 'Heatwave expected to hit Europe next week', summary: 'Meteorologists predict record-breaking temperatures across the continent.', source: 'Global Weather News', url: '#' },
     { title: 'New satellite to improve storm tracking', summary: 'The Sentinel-6 satellite is now fully operational, providing more accurate sea level data.', source: 'Science Today', url: '#' },
-  ]
+  ],
+  imageUrl: 'https://picsum.photos/seed/london/600/400'
 };
 
 const newYorkData: WeatherData = {
@@ -63,7 +64,8 @@ const newYorkData: WeatherData = {
   news: [
     { title: 'Hurricane season predictions are in', summary: 'NOAA predicts an above-average hurricane season for the Atlantic.', source: 'National Weather Post', url: '#' },
     { title: 'Understanding the urban heat island effect', summary: 'Cities are getting hotter. Here is what you need to know about the phenomenon.', source: 'Urban Climate Magazine', url: '#' },
-  ]
+  ],
+  imageUrl: 'https://picsum.photos/seed/new-york/600/400'
 };
 
 const tokyoData: WeatherData = {
@@ -96,7 +98,8 @@ const tokyoData: WeatherData = {
   news: [
     { title: 'Typhoon season approaches Japan', summary: 'Experts advise residents to prepare for an active typhoon season.', source: 'Japan Weather Times', url: '#' },
     { title: 'Cherry blossoms bloomed early this year', summary: 'Climate change is affecting the timing of Japan\'s iconic sakura season.', source: 'Nature & Climate', url: '#' },
-  ]
+  ],
+  imageUrl: 'https://picsum.photos/seed/tokyo/600/400'
 };
 
 const parisData: WeatherData = {
@@ -117,6 +120,7 @@ const parisData: WeatherData = {
   ],
   weatherAlerts: [],
   news: [{ title: 'Seine river levels normal for the season', summary: 'No flood alerts currently in effect for Paris.', source: 'Meteo France', url: '#' }],
+  imageUrl: 'https://picsum.photos/seed/paris/600/400'
 };
 
 const berlinData: WeatherData = {
@@ -137,6 +141,7 @@ const berlinData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Pollen count high in Berlin', summary: 'Allergy sufferers should take precautions.', source: 'Wetter.de', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/berlin/600/400'
 };
 
 const moscowData: WeatherData = {
@@ -157,6 +162,7 @@ const moscowData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'First signs of autumn in Moscow', summary: 'Temperatures are dropping as the city heads into September.', source: 'Gismeteo', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/moscow/600/400'
 };
 
 const beijingData: WeatherData = {
@@ -177,6 +183,7 @@ const beijingData: WeatherData = {
     ],
     weatherAlerts: ['Air quality alert: Unhealthy for sensitive groups.'],
     news: [{ title: 'Efforts to combat pollution continue', summary: 'Beijing implements new measures to improve air quality.', source: 'China Daily', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/beijing/600/400'
 };
 
 const sydneyData: WeatherData = {
@@ -197,6 +204,7 @@ const sydneyData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Whale watching season in full swing', summary: 'Humpback whales can be spotted along the Sydney coast.', source: '7NEWS Sydney', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/sydney/600/400'
 };
 
 const cairoData: WeatherData = {
@@ -217,6 +225,7 @@ const cairoData: WeatherData = {
     ],
     weatherAlerts: ['Extreme heat warning in effect.'],
     news: [{ title: 'Discover the history of ancient Egypt', summary: 'Museums offer a cool escape from the summer heat.', source: 'Egypt Today', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/cairo/600/400'
 };
 
 const newDelhiData: WeatherData = {
@@ -237,6 +246,7 @@ const newDelhiData: WeatherData = {
     ],
     weatherAlerts: ['Heatwave warning: Avoid outdoor activities during midday.'],
     news: [{ title: 'Monsoon season to arrive late', summary: 'Meteorological department predicts a delay in monsoon rains.', source: 'The Times of India', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/new-delhi/600/400'
 };
 
 const mumbaiData: WeatherData = {
@@ -257,6 +267,7 @@ const mumbaiData: WeatherData = {
     ],
     weatherAlerts: ['High tide warning for coastal areas.'],
     news: [{ title: 'Mumbai prepares for heavy monsoon rains', summary: 'City authorities are on high alert for potential flooding.', source: 'Hindustan Times', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/mumbai/600/400'
 };
 
 const kolkataData: WeatherData = {
@@ -277,6 +288,7 @@ const kolkataData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Durga Puja preparations begin', summary: 'The city is gearing up for its biggest festival.', source: 'The Telegraph - Calcutta', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/kolkata/600/400'
 };
 
 const chennaiData: WeatherData = {
@@ -297,6 +309,7 @@ const chennaiData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Fishermen warned of strong winds', summary: 'The sea is expected to be rough for the next 48 hours.', source: 'The Hindu', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/chennai/600/400'
 };
 
 const bengaluruData: WeatherData = {
@@ -317,6 +330,7 @@ const bengaluruData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Bengaluru\'s tech scene continues to boom', summary: 'The city remains a top destination for IT professionals.', source: 'Deccan Herald', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/bengaluru/600/400'
 };
 
 const hyderabadData: WeatherData = {
@@ -337,6 +351,7 @@ const hyderabadData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Charminar restoration project nears completion', summary: 'The iconic monument is getting a facelift.', source: 'Telangana Today', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/hyderabad/600/400'
 };
 
 const jaipurData: WeatherData = {
@@ -357,6 +372,7 @@ const jaipurData: WeatherData = {
     ],
     weatherAlerts: ['Extreme heat warning in effect.'],
     news: [{ title: 'Tourism season peaks in the Pink City', summary: 'Jaipur sees a massive influx of tourists.', source: 'Rajasthan Patrika', url: '#' }],
+    imageUrl: 'https://picsum.photos/seed/jaipur/600/400'
 };
 
 
