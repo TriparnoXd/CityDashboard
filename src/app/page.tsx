@@ -9,12 +9,20 @@ import HourlyForecast from '@/components/weather/hourly-forecast'
 import DailyForecast from '@/components/weather/daily-forecast'
 import WeatherSummary from '@/components/weather/weather-summary'
 import WeatherNews from '@/components/weather/weather-news'
-import LocationSearch from '@/components/weather/location-search'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { searchLocations } from '@/lib/location-data'
 
 export default function Home() {
   const [location, setLocation] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
+  const locations = ['London', 'New York', 'Tokyo'];
 
   React.useEffect(() => {
     const data = getWeatherData(location)
@@ -40,10 +48,18 @@ export default function Home() {
           Clear Sky
         </h1>
         <div className="flex items-center gap-4">
-          <LocationSearch 
-            selectedLocation={location}
-            onLocationSelect={handleLocationSelect}
-          />
+          <Select onValueChange={handleLocationSelect} defaultValue={location}>
+            <SelectTrigger className="w-[180px] sm:w-[200px]">
+              <SelectValue placeholder="Select a location" />
+            </SelectTrigger>
+            <SelectContent>
+              {locations.map((loc) => (
+                <SelectItem key={loc} value={loc}>
+                  {loc}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <UnitToggle unit={unit} setUnit={setUnit} />
         </div>
       </header>
