@@ -13,7 +13,7 @@ interface HourlyForecastProps {
 
 const HourlyForecast: React.FC<HourlyForecastProps> = ({ data, unit }) => {
   return (
-    <Card>
+    <Card className="transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base font-semibold">
           <Clock className="h-5 w-5 text-muted-foreground" />
