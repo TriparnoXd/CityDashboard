@@ -48,7 +48,7 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm md:px-8">
         <h1 className="text-xl font-bold tracking-tight text-primary-foreground-dark sm:text-2xl">
-          Clear Sky
+          City Pulse
         </h1>
         <div className="flex items-center gap-4">
           <Select onValueChange={handleLocationSelect} defaultValue={location}>
