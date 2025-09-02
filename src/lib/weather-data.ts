@@ -99,11 +99,219 @@ const tokyoData: WeatherData = {
   ]
 };
 
+const parisData: WeatherData = {
+  current: { temperature: 18, humidity: 65, windSpeed: 8, weatherConditions: 'Sunny' },
+  hourlyForecast: [
+    { time: '3 PM', temperature: 19, weatherConditions: 'Sunny' },
+    { time: '6 PM', temperature: 17, weatherConditions: 'Partly cloudy' },
+    { time: '9 PM', temperature: 15, weatherConditions: 'Clear' },
+  ],
+  dailyForecast: [
+    { day: 'Today', highTemperature: 20, lowTemperature: 12, weatherConditions: 'Sunny' },
+    { day: 'Mon', highTemperature: 22, lowTemperature: 14, weatherConditions: 'Partly cloudy' },
+  ],
+  weatherAlerts: [],
+  news: [{ title: 'Seine river levels normal for the season', summary: 'No flood alerts currently in effect for Paris.', source: 'Meteo France', url: '#' }],
+};
+
+const berlinData: WeatherData = {
+    current: { temperature: 16, humidity: 75, windSpeed: 12, weatherConditions: 'Cloudy' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 17, weatherConditions: 'Cloudy' },
+        { time: '6 PM', temperature: 15, weatherConditions: 'Light rain' },
+        { time: '9 PM', temperature: 13, weatherConditions: 'Cloudy' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 18, lowTemperature: 10, weatherConditions: 'Cloudy' },
+        { day: 'Mon', highTemperature: 19, lowTemperature: 11, weatherConditions: 'Rain' },
+    ],
+    weatherAlerts: [],
+    news: [{ title: 'Pollen count high in Berlin', summary: 'Allergy sufferers should take precautions.', source: 'Wetter.de', url: '#' }],
+};
+
+const moscowData: WeatherData = {
+    current: { temperature: 10, humidity: 80, windSpeed: 5, weatherConditions: 'Light rain' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 11, weatherConditions: 'Light rain' },
+        { time: '6 PM', temperature: 9, weatherConditions: 'Rain' },
+        { time: '9 PM', temperature: 8, weatherConditions: 'Cloudy' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 12, lowTemperature: 6, weatherConditions: 'Rain' },
+        { day: 'Mon', highTemperature: 14, lowTemperature: 7, weatherConditions: 'Partly cloudy' },
+    ],
+    weatherAlerts: [],
+    news: [{ title: 'First signs of autumn in Moscow', summary: 'Temperatures are dropping as the city heads into September.', source: 'Gismeteo', url: '#' }],
+};
+
+const beijingData: WeatherData = {
+    current: { temperature: 22, humidity: 70, windSpeed: 6, weatherConditions: 'Haze' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 23, weatherConditions: 'Haze' },
+        { time: '6 PM', temperature: 21, weatherConditions: 'Haze' },
+        { time: '9 PM', temperature: 19, weatherConditions: 'Cloudy' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 25, lowTemperature: 18, weatherConditions: 'Haze' },
+        { day: 'Mon', highTemperature: 26, lowTemperature: 19, weatherConditions: 'Partly cloudy' },
+    ],
+    weatherAlerts: ['Air quality alert: Unhealthy for sensitive groups.'],
+    news: [{ title: 'Efforts to combat pollution continue', summary: 'Beijing implements new measures to improve air quality.', source: 'China Daily', url: '#' }],
+};
+
+const sydneyData: WeatherData = {
+    current: { temperature: 20, humidity: 60, windSpeed: 20, weatherConditions: 'Sunny' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 21, weatherConditions: 'Sunny' },
+        { time: '6 PM', temperature: 18, weatherConditions: 'Clear' },
+        { time: '9 PM', temperature: 16, weatherConditions: 'Clear' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 22, lowTemperature: 15, weatherConditions: 'Sunny' },
+        { day: 'Mon', highTemperature: 23, lowTemperature: 16, weatherConditions: 'Sunny' },
+    ],
+    weatherAlerts: [],
+    news: [{ title: 'Whale watching season in full swing', summary: 'Humpback whales can be spotted along the Sydney coast.', source: '7NEWS Sydney', url: '#' }],
+};
+
+const cairoData: WeatherData = {
+    current: { temperature: 35, humidity: 40, windSpeed: 10, weatherConditions: 'Sunny' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 36, weatherConditions: 'Sunny' },
+        { time: '6 PM', temperature: 33, weatherConditions: 'Clear' },
+        { time: '9 PM', temperature: 30, weatherConditions: 'Clear' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 38, lowTemperature: 25, weatherConditions: 'Sunny' },
+        { day: 'Mon', highTemperature: 39, lowTemperature: 26, weatherConditions: 'Sunny' },
+    ],
+    weatherAlerts: ['Extreme heat warning in effect.'],
+    news: [{ title: 'Discover the history of ancient Egypt', summary: 'Museums offer a cool escape from the summer heat.', source: 'Egypt Today', url: '#' }],
+};
+
+const newDelhiData: WeatherData = {
+    current: { temperature: 38, humidity: 50, windSpeed: 5, weatherConditions: 'Haze' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 39, weatherConditions: 'Haze' },
+        { time: '6 PM', temperature: 36, weatherConditions: 'Haze' },
+        { time: '9 PM', temperature: 34, weatherConditions: 'Partly cloudy' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 42, lowTemperature: 30, weatherConditions: 'Haze' },
+        { day: 'Mon', highTemperature: 43, lowTemperature: 31, weatherConditions: 'Sunny' },
+    ],
+    weatherAlerts: ['Heatwave warning: Avoid outdoor activities during midday.'],
+    news: [{ title: 'Monsoon season to arrive late', summary: 'Meteorological department predicts a delay in monsoon rains.', source: 'The Times of India', url: '#' }],
+};
+
+const mumbaiData: WeatherData = {
+    current: { temperature: 31, humidity: 85, windSpeed: 18, weatherConditions: 'Rain' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 31, weatherConditions: 'Rain' },
+        { time: '6 PM', temperature: 30, weatherConditions: 'Heavy rain' },
+        { time: '9 PM', temperature: 29, weatherConditions: 'Rain' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 32, lowTemperature: 27, weatherConditions: 'Rain' },
+        { day: 'Mon', highTemperature: 31, lowTemperature: 27, weatherConditions: 'Thunderstorm' },
+    ],
+    weatherAlerts: ['High tide warning for coastal areas.'],
+    news: [{ title: 'Mumbai prepares for heavy monsoon rains', summary: 'City authorities are on high alert for potential flooding.', source: 'Hindustan Times', url: '#' }],
+};
+
+const kolkataData: WeatherData = {
+    current: { temperature: 33, humidity: 88, windSpeed: 15, weatherConditions: 'Thunderstorm' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 33, weatherConditions: 'Thunderstorm' },
+        { time: '6 PM', temperature: 31, weatherConditions: 'Rain' },
+        { time: '9 PM', temperature: 30, weatherConditions: 'Cloudy' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 34, lowTemperature: 28, weatherConditions: 'Thunderstorm' },
+        { day: 'Mon', highTemperature: 35, lowTemperature: 28, weatherConditions: 'Rain' },
+    ],
+    weatherAlerts: [],
+    news: [{ title: 'Durga Puja preparations begin', summary: 'The city is gearing up for its biggest festival.', source: 'The Telegraph - Calcutta', url: '#' }],
+};
+
+const chennaiData: WeatherData = {
+    current: { temperature: 34, humidity: 75, windSpeed: 12, weatherConditions: 'Partly cloudy' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 35, weatherConditions: 'Partly cloudy' },
+        { time: '6 PM', temperature: 33, weatherConditions: 'Partly cloudy' },
+        { time: '9 PM', temperature: 31, weatherConditions: 'Cloudy' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 36, lowTemperature: 28, weatherConditions: 'Partly cloudy' },
+        { day: 'Mon', highTemperature: 37, lowTemperature: 29, weatherConditions: 'Sunny' },
+    ],
+    weatherAlerts: [],
+    news: [{ title: 'Fishermen warned of strong winds', summary: 'The sea is expected to be rough for the next 48 hours.', source: 'The Hindu', url: '#' }],
+};
+
+const bengaluruData: WeatherData = {
+    current: { temperature: 27, humidity: 80, windSpeed: 10, weatherConditions: 'Cloudy' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 28, weatherConditions: 'Cloudy' },
+        { time: '6 PM', temperature: 26, weatherConditions: 'Light rain' },
+        { time: '9 PM', temperature: 25, weatherConditions: 'Cloudy' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 29, lowTemperature: 21, weatherConditions: 'Light rain' },
+        { day: 'Mon', highTemperature: 30, lowTemperature: 22, weatherConditions: 'Partly cloudy' },
+    ],
+    weatherAlerts: [],
+    news: [{ title: 'Bengaluru\'s tech scene continues to boom', summary: 'The city remains a top destination for IT professionals.', source: 'Deccan Herald', url: '#' }],
+};
+
+const hyderabadData: WeatherData = {
+    current: { temperature: 32, humidity: 65, windSpeed: 8, weatherConditions: 'Sunny' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 33, weatherConditions: 'Sunny' },
+        { time: '6 PM', temperature: 31, weatherConditions: 'Partly cloudy' },
+        { time: '9 PM', temperature: 29, weatherConditions: 'Clear' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 35, lowTemperature: 26, weatherConditions: 'Sunny' },
+        { day: 'Mon', highTemperature: 36, lowTemperature: 27, weatherConditions: 'Partly cloudy' },
+    ],
+    weatherAlerts: [],
+    news: [{ title: 'Charminar restoration project nears completion', summary: 'The iconic monument is getting a facelift.', source: 'Telangana Today', url: '#' }],
+};
+
+const jaipurData: WeatherData = {
+    current: { temperature: 39, humidity: 30, windSpeed: 7, weatherConditions: 'Sunny' },
+    hourlyForecast: [
+        { time: '3 PM', temperature: 40, weatherConditions: 'Sunny' },
+        { time: '6 PM', temperature: 37, weatherConditions: 'Clear' },
+        { time: '9 PM', temperature: 35, weatherConditions: 'Clear' },
+    ],
+    dailyForecast: [
+        { day: 'Today', highTemperature: 43, lowTemperature: 29, weatherConditions: 'Sunny' },
+        { day: 'Mon', highTemperature: 44, lowTemperature: 30, weatherConditions: 'Sunny' },
+    ],
+    weatherAlerts: ['Extreme heat warning in effect.'],
+    news: [{ title: 'Tourism season peaks in the Pink City', summary: 'Jaipur sees a massive influx of tourists.', source: 'Rajasthan Patrika', url: '#' }],
+};
+
 
 const weatherDatabase: Record<string, WeatherData> = {
   'London': londonData,
   'New York': newYorkData,
   'Tokyo': tokyoData,
+  'Paris': parisData,
+  'Berlin': berlinData,
+  'Moscow': moscowData,
+  'Beijing': beijingData,
+  'Sydney': sydneyData,
+  'Cairo': cairoData,
+  'New Delhi': newDelhiData,
+  'Mumbai': mumbaiData,
+  'Kolkata': kolkataData,
+  'Chennai': chennaiData,
+  'Bengaluru': bengaluruData,
+  'Hyderabad': hyderabadData,
+  'Jaipur': jaipurData,
 };
 
 export function getWeatherData(location: string): WeatherData {

@@ -16,13 +16,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { searchLocations } from '@/lib/location-data'
 
 export default function Home() {
   const [location, setLocation] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
-  const locations = ['London', 'New York', 'Tokyo'];
+  const locations = [
+    'London', 'New York', 'Tokyo', 'Paris', 'Berlin', 'Moscow', 
+    'Beijing', 'Sydney', 'Cairo', 'New Delhi', 'Mumbai', 'Kolkata',
+    'Chennai', 'Bengaluru', 'Hyderabad', 'Jaipur'
+  ];
 
   React.useEffect(() => {
     const data = getWeatherData(location)
