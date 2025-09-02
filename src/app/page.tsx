@@ -1,20 +1,21 @@
 "use client"
 
 import * as React from 'react'
-import { Cloud, Droplets, Gauge, Rss, Wind } from 'lucide-react'
 import { getWeatherData } from '@/lib/weather-data'
 import type { Unit, WeatherData } from '@/lib/types'
-import LocationSwitcher from '@/components/weather/location-switcher'
 import UnitToggle from '@/components/weather/unit-toggle'
 import CurrentConditions from '@/components/weather/current-conditions'
 import HourlyForecast from '@/components/weather/hourly-forecast'
 import DailyForecast from '@/components/weather/daily-forecast'
 import WeatherSummary from '@/components/weather/weather-summary'
 import WeatherNews from '@/components/weather/weather-news'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Search } from 'lucide-react'
 
 export default function Home() {
   const [location, setLocation] = React.useState('London')
+  const [inputValue, setInputValue] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
 
@@ -22,6 +23,11 @@ export default function Home() {
     const data = getWeatherData(location)
     setWeatherData(data)
   }, [location])
+
+  const handleLocationChange = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLocation(inputValue);
+  };
 
   if (!weatherData) {
     return (
@@ -38,11 +44,17 @@ export default function Home() {
           Clear Sky
         </h1>
         <div className="flex items-center gap-4">
-          <LocationSwitcher
-            location={location}
-            setLocation={setLocation}
-            locations={['London', 'New York', 'Tokyo']}
-          />
+          <form onSubmit={handleLocationChange} className="flex gap-2">
+            <Input 
+              placeholder="Enter a location" 
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="w-[140px] sm:w-[180px]"
+            />
+            <Button type="submit" size="icon" variant="outline">
+              <Search className="h-4 w-4" />
+            </Button>
+          </form>
           <UnitToggle unit={unit} setUnit={setUnit} />
         </div>
       </header>
