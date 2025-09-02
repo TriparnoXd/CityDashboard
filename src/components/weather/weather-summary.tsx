@@ -40,7 +40,7 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherData }) => {
       </CardHeader>
       <CardContent className="space-y-4">
         {summary ? (
-          <p className="text-sm text-muted-foreground">{summary}</p>
+          <div className="text-sm text-muted-foreground whitespace-pre-wrap">{summary}</div>
         ) : (
           <p className="text-sm text-muted-foreground">
             Click the button to generate a concise, AI-powered summary of the weather forecast.
