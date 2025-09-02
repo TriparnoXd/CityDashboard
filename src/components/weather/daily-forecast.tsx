@@ -27,7 +27,7 @@ const DailyForecast: React.FC<DailyForecastProps> = ({ data, unit }) => {
               <li className="flex items-center justify-between p-2">
                 <p className="w-1/4 font-medium">{item.day}</p>
                 <div className="flex w-1/4 items-center justify-center">
-                  <WeatherIcon condition={item.weatherConditions} className="h-6 w-6 text-accent" />
+                  <WeatherIcon condition={item.weatherConditions} className="h-6 w-6 text-primary" />
                 </div>
                 <p className="w-1/2 text-right font-medium text-muted-foreground">
                   <span className="text-foreground">{convertTemperature(item.highTemperature, unit)}°</span>

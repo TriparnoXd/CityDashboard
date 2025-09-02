@@ -30,7 +30,7 @@ const HourlyForecast: React.FC<HourlyForecastProps> = ({ data, unit }) => {
                 style={{ minWidth: '100px' }}
               >
                 <p className="text-sm font-medium text-muted-foreground">{item.time}</p>
-                <WeatherIcon condition={item.weatherConditions} className="h-8 w-8 text-accent" />
+                <WeatherIcon condition={item.weatherConditions} className="h-8 w-8 text-primary" />
                 <p className="text-lg font-bold">{convertTemperature(item.temperature, unit)}°</p>
               </div>
             ))}
