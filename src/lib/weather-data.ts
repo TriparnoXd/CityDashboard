@@ -31,7 +31,7 @@ const londonData: WeatherData = {
     { title: 'Heatwave expected to hit Europe next week', summary: 'Meteorologists predict record-breaking temperatures across the continent.', source: 'Global Weather News', url: '#' },
     { title: 'New satellite to improve storm tracking', summary: 'The Sentinel-6 satellite is now fully operational, providing more accurate sea level data.', source: 'Science Today', url: '#' },
   ],
-  imageUrl: 'https://picsum.photos/seed/buckingham-palace/600/400'
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Buckingham_Palace_UK.jpg/2560px-Buckingham_Palace_UK.jpg'
 };
 
 const newYorkData: WeatherData = {
@@ -509,3 +509,5 @@ export function convertTemperature(temp: number, toUnit: Unit): number {
     }
     return temp; // Assumes input is always Celsius
 }
+
+    
