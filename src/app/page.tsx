@@ -16,8 +16,6 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
-import { useAuth, useUser } from "@/firebase"
-import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth"
 import { LoaderCircle } from "lucide-react"
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -35,81 +33,37 @@ export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
   const [googleLoading, setGoogleLoading] = React.useState(false);
 
-  const auth = useAuth();
-  const { user, loading: userLoading } = useUser();
-
-  React.useEffect(() => {
-    if (!userLoading && user) {
-      router.push('/dashboard');
-    }
-  }, [user, userLoading, router]);
-
   const handleSignIn = async () => {
-    if (!auth) return;
     setLoading(true);
-
     // This is a mock implementation. For a real app, you would not have a hardcoded user.
-    // However, to allow the original test user to work, we'll keep it.
     if (email === 'test@example.com' && password === 'password') {
-      try {
-        // We sign in anonymously to get a UID, but this user is not "real".
-        // A real implementation would use createUserWithEmailAndPassword or a custom auth system.
+      // In a real app, you'd get a token from your backend and store it.
+      // For this dummy implementation, we just navigate.
+      setTimeout(() => {
         router.push('/dashboard');
-        return;
-      } catch (error: any) {
+      }, 1000);
+    } else {
+      setTimeout(() => {
         toast({
           variant: "destructive",
           title: "Login Failed",
-          description: error.message,
+          description: "Invalid email or password.",
         });
-      } finally {
         setLoading(false);
-      }
-      return;
-    }
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      router.push('/dashboard');
-    } catch (error: any) {
-      let description = "An unknown error occurred.";
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-        description = "Invalid email or password.";
-      }
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: description,
-      });
-    } finally {
-      setLoading(false);
+      }, 1000);
     }
   };
 
   const handleGoogleSignIn = async () => {
-    if (!auth) return;
     setGoogleLoading(true);
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-      router.push('/dashboard');
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Google Sign-In Failed",
-        description: error.message,
-      });
-    } finally {
-      setGoogleLoading(false);
-    }
-  }
-  
-  if (userLoading || (!userLoading && user)) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <LoaderCircle className="animate-spin" />
-      </div>
-    );
+    // This is a mock implementation. For a real app, you would handle the Google OAuth flow.
+    setTimeout(() => {
+        toast({
+            title: "Feature not implemented",
+            description: "Google Sign-In will be available soon.",
+        });
+        setGoogleLoading(false);
+    }, 1000);
   }
 
   return (
