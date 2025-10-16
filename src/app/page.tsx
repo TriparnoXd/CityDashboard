@@ -1,94 +1,56 @@
+
 "use client"
 
-import * as React from 'react'
-import { getWeatherData } from '@/lib/weather-data'
-import type { Unit, WeatherData } from '@/lib/types'
-import UnitToggle from '@/components/weather/unit-toggle'
-import CurrentConditions from '@/components/weather/current-conditions'
-import HourlyForecast from '@/components/weather/hourly-forecast'
-import DailyForecast from '@/components/weather/daily-forecast'
-import WeatherSummary from '@/components/weather/weather-summary'
-import WeatherNews from '@/components/weather/weather-news'
+import { Button } from "@/components/ui/button"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import Link from "next/link"
+import { useRouter } from 'next/navigation'
 
-export default function Home() {
-  const [location, setLocation] = React.useState('London')
-  const [unit, setUnit] = React.useState<Unit>('C')
-  const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
-  const locations = [
-    'London', 'New York', 'Tokyo', 'Paris', 'Berlin', 'Moscow', 
-    'Beijing', 'Sydney', 'Cairo', 'New Delhi', 'Mumbai', 'Kolkata',
-    'Chennai', 'Bengaluru', 'Hyderabad', 'Jaipur'
-  ];
+export default function LoginPage() {
+  const router = useRouter();
 
-  React.useEffect(() => {
-    const data = getWeatherData(location)
-    setWeatherData(data)
-  }, [location])
-
-  const handleLocationSelect = (newLocation: string) => {
-    setLocation(newLocation);
+  const handleSignIn = () => {
+    router.push('/dashboard');
   };
 
-  if (!weatherData) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        Loading...
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm md:px-8">
-        <h1 className="text-xl font-bold tracking-tight text-primary-foreground-dark sm:text-2xl">
-          City Pulse
-        </h1>
-        <div className="flex items-center gap-4">
-          <Select onValueChange={handleLocationSelect} defaultValue={location}>
-            <SelectTrigger className="w-[180px] sm:w-[200px]">
-              <SelectValue placeholder="Select a location" />
-            </SelectTrigger>
-            <SelectContent>
-              {locations.map((loc) => (
-                <SelectItem key={loc} value={loc}>
-                  {loc}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <UnitToggle unit={unit} setUnit={setUnit} />
-        </div>
-      </header>
-
-      <main className="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 md:p-8">
-        <div className="lg:col-span-2 xl:col-span-3">
-          <CurrentConditions data={weatherData.current} unit={unit} location={location} imageUrl={weatherData.imageUrl} />
-        </div>
-
-        <div className="lg:col-span-2 xl:col-span-2">
-          <DailyForecast data={weatherData.dailyForecast} unit={unit} />
-        </div>
-        
-        <div className="md:col-span-2 lg:col-span-4 xl:col-span-5">
-          <HourlyForecast data={weatherData.hourlyForecast} unit={unit} />
-        </div>
-
-        <div className="md:col-span-1 lg:col-span-2 xl:col-span-2">
-           <WeatherSummary weatherData={weatherData} />
-        </div>
-        
-        <div className="md:col-span-1 lg:col-span-2 xl:col-span-3">
-            <WeatherNews news={weatherData.news} />
-        </div>
-
-      </main>
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" placeholder="m@example.com" required />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="password">Password</Label>
+            <Input id="password" type="password" required />
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-col">
+          <Button className="w-full" onClick={handleSignIn}>Sign in</Button>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="#" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
