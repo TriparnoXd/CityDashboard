@@ -29,9 +29,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
 import { User, LogOut } from 'lucide-react'
+import { useAuth, useUser } from '@/firebase'
+import { signOut } from 'firebase/auth'
 
 export default function DashboardPage() {
   const router = useRouter()
+  const { user, loading: userLoading } = useUser()
+  const auth = useAuth()
+  
   const [location, setLocation] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
@@ -41,11 +46,11 @@ export default function DashboardPage() {
     'Chennai', 'Bengaluru', 'Hyderabad', 'Jaipur'
   ];
 
-  const dummyUser = {
-    name: "Test User",
-    email: "test@example.com",
-    avatarUrl: `https://i.pravatar.cc/150?u=test@example.com`
-  }
+  React.useEffect(() => {
+    if (!userLoading && !user) {
+      router.push('/');
+    }
+  }, [user, userLoading, router]);
 
   React.useEffect(() => {
     const data = getWeatherData(location)
@@ -56,11 +61,14 @@ export default function DashboardPage() {
     setLocation(newLocation);
   };
   
-  const handleLogout = () => {
-    router.push('/');
+  const handleLogout = async () => {
+    if (auth) {
+      await signOut(auth);
+      router.push('/');
+    }
   }
 
-  if (!weatherData) {
+  if (userLoading || !user || !weatherData) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         Loading...
@@ -92,7 +100,7 @@ export default function DashboardPage() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={dummyUser.avatarUrl} alt={dummyUser.name} />
+                  <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
                   <AvatarFallback>
                     <User />
                   </AvatarFallback>
@@ -102,9 +110,9 @@ export default function DashboardPage() {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{dummyUser.name}</p>
+                  <p className="text-sm font-medium leading-none">{user.displayName}</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    {dummyUser.email}
+                    {user.email}
                   </p>
                 </div>
               </DropdownMenuLabel>
