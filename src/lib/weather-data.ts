@@ -65,7 +65,7 @@ const newYorkData: WeatherData = {
     { title: 'Hurricane season predictions are in', summary: 'NOAA predicts an above-average hurricane season for the Atlantic.', source: 'National Weather Post', url: '#' },
     { title: 'Understanding the urban heat island effect', summary: 'Cities are getting hotter. Here is what you need to know about the phenomenon.', source: 'Urban Climate Magazine', url: '#' },
   ],
-  imageUrl: 'https://picsum.photos/seed/statue-of-liberty/600/400'
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Statue_of_Liberty_7.jpg/1024px-Statue_of_Liberty_7.jpg'
 };
 
 const tokyoData: WeatherData = {
@@ -99,7 +99,7 @@ const tokyoData: WeatherData = {
     { title: 'Typhoon season approaches Japan', summary: 'Experts advise residents to prepare for an active typhoon season.', source: 'Japan Weather Times', url: '#' },
     { title: 'Cherry blossoms bloomed early this year', summary: 'Climate change is affecting the timing of Japan\'s iconic sakura season.', source: 'Nature & Climate', url: '#' },
   ],
-  imageUrl: 'https://picsum.photos/seed/sensoji-temple/600/400'
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Sensoji-01.jpg/1280px-Sensoji-01.jpg'
 };
 
 const parisData: WeatherData = {
@@ -128,7 +128,7 @@ const parisData: WeatherData = {
   ],
   weatherAlerts: [],
   news: [{ title: 'Seine river levels normal for the season', summary: 'No flood alerts currently in effect for Paris.', source: 'Meteo France', url: '#' }],
-  imageUrl: 'https://picsum.photos/seed/eiffel-tower/600/400'
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/1024px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg'
 };
 
 const berlinData: WeatherData = {
@@ -157,7 +157,7 @@ const berlinData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Pollen count high in Berlin', summary: 'Allergy sufferers should take precautions.', source: 'Wetter.de', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/brandenburg-gate/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Brandenburger_Tor_abends.jpg/1280px-Brandenburger_Tor_abends.jpg'
 };
 
 const moscowData: WeatherData = {
@@ -186,7 +186,7 @@ const moscowData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'First signs of autumn in Moscow', summary: 'Temperatures are dropping as the city heads into September.', source: 'Gismeteo', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/saint-basil-cathedral/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Moscow-Red-Square-Saint-Basils-Cathedral-2021-G.jpg/1280px-Moscow-Red-Square-Saint-Basils-Cathedral-2021-G.jpg'
 };
 
 const beijingData: WeatherData = {
@@ -215,7 +215,7 @@ const beijingData: WeatherData = {
     ],
     weatherAlerts: ['Air quality alert: Unhealthy for sensitive groups.'],
     news: [{ title: 'Efforts to combat pollution continue', summary: 'Beijing implements new measures to improve air quality.', source: 'China Daily', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/great-wall-china/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1280px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg'
 };
 
 const sydneyData: WeatherData = {
@@ -244,7 +244,7 @@ const sydneyData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Whale watching season in full swing', summary: 'Humpback whales can be spotted along the Sydney coast.', source: '7NEWS Sydney', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/sydney-opera-house/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg/1280px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_%282%29_2019-06-21.jpg'
 };
 
 const cairoData: WeatherData = {
@@ -273,7 +273,7 @@ const cairoData: WeatherData = {
     ],
     weatherAlerts: ['Extreme heat warning in effect.'],
     news: [{ title: 'Discover the history of ancient Egypt', summary: 'Museums offer a cool escape from the summer heat.', source: 'Egypt Today', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/giza-pyramids/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Giza_pyramid_complex_%282015%29.jpg/1280px-Giza_pyramid_complex_%282015%29.jpg'
 };
 
 const newDelhiData: WeatherData = {
@@ -302,7 +302,7 @@ const newDelhiData: WeatherData = {
     ],
     weatherAlerts: ['Heatwave warning: Avoid outdoor activities during midday.'],
     news: [{ title: 'Monsoon season to arrive late', summary: 'Meteorological department predicts a delay in monsoon rains.', source: 'The Times of India', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/india-gate/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/India_Gate_in_New_Delhi_03-2016.jpg/1280px-India_Gate_in_New_Delhi_03-2016.jpg'
 };
 
 const mumbaiData: WeatherData = {
@@ -331,7 +331,7 @@ const mumbaiData: WeatherData = {
     ],
     weatherAlerts: ['High tide warning for coastal areas.'],
     news: [{ title: 'Mumbai prepares for heavy monsoon rains', summary: 'City authorities are on high alert for potential flooding.', source: 'Hindustan Times', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/gateway-of-india/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gateway_of_India_on_a_Hot_and_Hazy_Day.jpg/1280px-Gateway_of_India_on_a_Hot_and_Hazy_Day.jpg'
 };
 
 const kolkataData: WeatherData = {
@@ -360,7 +360,7 @@ const kolkataData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Durga Puja preparations begin', summary: 'The city is gearing up for its biggest festival.', source: 'The Telegraph - Calcutta', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/victoria-memorial/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Victoria_Memorial_in_the_evening.jpg/1280px-Victoria_Memorial_in_the_evening.jpg'
 };
 
 const chennaiData: WeatherData = {
@@ -389,7 +389,7 @@ const chennaiData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Fishermen warned of strong winds', summary: 'The sea is expected to be rough for the next 48 hours.', source: 'The Hindu', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/marina-beach/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Marina_Beach_Sunrise.jpg/1280px-Marina_Beach_Sunrise.jpg'
 };
 
 const bengaluruData: WeatherData = {
@@ -418,7 +418,7 @@ const bengaluruData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Bengaluru\'s tech scene continues to boom', summary: 'The city remains a top destination for IT professionals.', source: 'Deccan Herald', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/bangalore-palace/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Bangalore_Palace.jpg/1280px-Bangalore_Palace.jpg'
 };
 
 const hyderabadData: WeatherData = {
@@ -447,7 +447,7 @@ const hyderabadData: WeatherData = {
     ],
     weatherAlerts: [],
     news: [{ title: 'Charminar restoration project nears completion', summary: 'The iconic monument is getting a facelift.', source: 'Telangana Today', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/charminar/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Charminar_in_the_morning.jpg/1024px-Charminar_in_the_morning.jpg'
 };
 
 const jaipurData: WeatherData = {
@@ -476,7 +476,7 @@ const jaipurData: WeatherData = {
     ],
     weatherAlerts: ['Extreme heat warning in effect.'],
     news: [{ title: 'Tourism season peaks in the Pink City', summary: 'Jaipur sees a massive influx of tourists.', source: 'Rajasthan Patrika', url: '#' }],
-    imageUrl: 'https://picsum.photos/seed/hawa-mahal/600/400'
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Hawa_Mahal_Jaipur.jpg/1024px-Hawa_Mahal_Jaipur.jpg'
 };
 
 
