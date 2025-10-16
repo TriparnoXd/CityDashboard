@@ -17,6 +17,13 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 
+const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <title>Google</title>
+        <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.05 1.05-2.86 2.25-4.82 2.25-3.44 0-6.24-2.82-6.24-6.3s2.8-6.3 6.24-6.3c1.88 0 3.24.75 4.03 1.5l2.43-2.32C17.43 2.92 15.21 2 12.48 2 7.19 2 3.1 5.9 3.1 11s4.09 9 9.38 9c5.17 0 9.1-3.53 9.1-9.25 0-.75-.08-1.25-.18-1.83H12.48z" fill="currentColor"></path>
+    </svg>
+)
+
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
@@ -66,12 +73,27 @@ export default function LoginPage() {
               required 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
             />
           </div>
+          <Button className="w-full mt-2" onClick={handleSignIn}>Sign in</Button>
+           <div className="relative mt-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+          <Button variant="outline" className="w-full">
+            <GoogleIcon className="mr-2 h-4 w-4" />
+            Sign in with Google
+          </Button>
         </CardContent>
         <CardFooter className="flex flex-col">
-          <Button className="w-full" onClick={handleSignIn}>Sign in</Button>
-          <div className="mt-4 text-center text-sm">
+          <div className="text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link href="#" className="underline">
               Sign up
