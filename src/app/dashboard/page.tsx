@@ -1,6 +1,8 @@
+
 "use client"
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { getWeatherData } from '@/lib/weather-data'
 import type { Unit, WeatherData } from '@/lib/types'
 import UnitToggle from '@/components/weather/unit-toggle'
@@ -16,8 +18,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from '@/components/ui/button'
+import { User, LogOut } from 'lucide-react'
 
 export default function DashboardPage() {
+  const router = useRouter()
   const [location, setLocation] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
@@ -27,6 +41,12 @@ export default function DashboardPage() {
     'Chennai', 'Bengaluru', 'Hyderabad', 'Jaipur'
   ];
 
+  const dummyUser = {
+    name: "Test User",
+    email: "test@example.com",
+    avatarUrl: `https://i.pravatar.cc/150?u=test@example.com`
+  }
+
   React.useEffect(() => {
     const data = getWeatherData(location)
     setWeatherData(data)
@@ -35,6 +55,10 @@ export default function DashboardPage() {
   const handleLocationSelect = (newLocation: string) => {
     setLocation(newLocation);
   };
+  
+  const handleLogout = () => {
+    router.push('/');
+  }
 
   if (!weatherData) {
     return (
@@ -64,6 +88,33 @@ export default function DashboardPage() {
             </SelectContent>
           </Select>
           <UnitToggle unit={unit} setUnit={setUnit} />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={dummyUser.avatarUrl} alt={dummyUser.name} />
+                  <AvatarFallback>
+                    <User />
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{dummyUser.name}</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {dummyUser.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
