@@ -1,0 +1,337 @@
+{
+  "entities": {
+    "Location": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Location",
+      "type": "object",
+      "description": "Represents a geographical location for weather forecasts.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the location."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the location (e.g., City, Town)."
+        },
+        "latitude": {
+          "type": "number",
+          "description": "Latitude coordinate of the location."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Longitude coordinate of the location."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "latitude",
+        "longitude"
+      ]
+    },
+    "CurrentWeather": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CurrentWeather",
+      "type": "object",
+      "description": "Represents the current weather conditions for a specific location.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the current weather data."
+        },
+        "locationId": {
+          "type": "string",
+          "description": "Reference to Location. (Relationship: Location 1:N CurrentWeather)"
+        },
+        "temperature": {
+          "type": "number",
+          "description": "Current temperature in the selected units."
+        },
+        "humidity": {
+          "type": "number",
+          "description": "Current humidity percentage."
+        },
+        "windSpeed": {
+          "type": "number",
+          "description": "Current wind speed in the selected units."
+        },
+        "weatherCondition": {
+          "type": "string",
+          "description": "Description of the current weather condition (e.g., Sunny, Cloudy)."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of when the weather data was recorded.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "locationId",
+        "temperature",
+        "humidity",
+        "windSpeed",
+        "weatherCondition",
+        "timestamp"
+      ]
+    },
+    "HourlyForecast": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "HourlyForecast",
+      "type": "object",
+      "description": "Represents an hourly weather forecast for a specific location.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the hourly forecast data."
+        },
+        "locationId": {
+          "type": "string",
+          "description": "Reference to Location. (Relationship: Location 1:N HourlyForecast)"
+        },
+        "temperature": {
+          "type": "number",
+          "description": "Temperature forecast for the hour."
+        },
+        "weatherCondition": {
+          "type": "string",
+          "description": "Weather condition forecast for the hour."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp for the hour of the forecast.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "locationId",
+        "temperature",
+        "weatherCondition",
+        "timestamp"
+      ]
+    },
+    "DailyForecast": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DailyForecast",
+      "type": "object",
+      "description": "Represents a daily weather forecast for a specific location.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the daily forecast data."
+        },
+        "locationId": {
+          "type": "string",
+          "description": "Reference to Location. (Relationship: Location 1:N DailyForecast)"
+        },
+        "highTemperature": {
+          "type": "number",
+          "description": "High temperature forecast for the day."
+        },
+        "lowTemperature": {
+          "type": "number",
+          "description": "Low temperature forecast for the day."
+        },
+        "weatherCondition": {
+          "type": "string",
+          "description": "General weather condition forecast for the day."
+        },
+        "date": {
+          "type": "string",
+          "description": "Date for the daily forecast.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "locationId",
+        "highTemperature",
+        "lowTemperature",
+        "weatherCondition",
+        "date"
+      ]
+    },
+    "UserPreferences": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserPreferences",
+      "type": "object",
+      "description": "Represents user preferences, such as temperature units and preferred locations.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user preferences."
+        },
+        "temperatureUnit": {
+          "type": "string",
+          "description": "Preferred temperature unit (e.g., Celsius, Fahrenheit)."
+        },
+        "preferredLocationIds": {
+          "type": "array",
+          "description": "References to Locations. (Relationship: UserPreferences 1:N Location)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "temperatureUnit"
+      ]
+    },
+    "WeatherNews": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WeatherNews",
+      "type": "object",
+      "description": "Represents a weather-related news article.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the news article."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the news article."
+        },
+        "content": {
+          "type": "string",
+          "description": "Content of the news article."
+        },
+        "source": {
+          "type": "string",
+          "description": "Source of the news article."
+        },
+        "url": {
+          "type": "string",
+          "description": "URL of the news article.",
+          "format": "uri"
+        },
+        "publishedDate": {
+          "type": "string",
+          "description": "Date the news article was published.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "content",
+        "source",
+        "url",
+        "publishedDate"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/locations/{locationId}",
+        "definition": {
+          "entityName": "Location",
+          "schema": {
+            "$ref": "#/backend/entities/Location"
+          },
+          "description": "Stores geographical location data for weather forecasts.",
+          "params": [
+            {
+              "name": "locationId",
+              "description": "Unique identifier for the location."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/current_weather/{weatherId}",
+        "definition": {
+          "entityName": "CurrentWeather",
+          "schema": {
+            "$ref": "#/backend/entities/CurrentWeather"
+          },
+          "description": "Stores current weather conditions for a specific location.",
+          "params": [
+            {
+              "name": "weatherId",
+              "description": "Unique identifier for the current weather data."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/hourly_forecasts/{forecastId}",
+        "definition": {
+          "entityName": "HourlyForecast",
+          "schema": {
+            "$ref": "#/backend/entities/HourlyForecast"
+          },
+          "description": "Stores hourly weather forecasts for a specific location.",
+          "params": [
+            {
+              "name": "forecastId",
+              "description": "Unique identifier for the hourly forecast data."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/daily_forecasts/{forecastId}",
+        "definition": {
+          "entityName": "DailyForecast",
+          "schema": {
+            "$ref": "#/backend/entities/DailyForecast"
+          },
+          "description": "Stores daily weather forecasts for a specific location.",
+          "params": [
+            {
+              "name": "forecastId",
+              "description": "Unique identifier for the daily forecast data."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/preferences/{preferencesId}",
+        "definition": {
+          "entityName": "UserPreferences",
+          "schema": {
+            "$ref": "#/backend/entities/UserPreferences"
+          },
+          "description": "Stores user preferences, such as temperature units and preferred locations. Path-based ownership: only the user can access their own preferences.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "Unique identifier for the user."
+            },
+            {
+              "name": "preferencesId",
+              "description": "Unique identifier for the user preferences document (should ideally be fixed to 'default' or similar to avoid multiple preference documents)."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/weather_news/{newsId}",
+        "definition": {
+          "entityName": "WeatherNews",
+          "schema": {
+            "$ref": "#/backend/entities/WeatherNews"
+          },
+          "description": "Stores weather-related news articles.",
+          "params": [
+            {
+              "name": "newsId",
+              "description": "Unique identifier for the news article."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to ensure data isolation and efficient querying based on the application's core features. We leverage path-based ownership for user-specific data (UserPreferences), while global data (Locations, WeatherNews) resides in top-level collections. For weather data (CurrentWeather, HourlyForecast, DailyForecast), we maintain separate collections to optimize querying for different forecast types. This segregation simplifies security rules and enhances performance.\n\nAuthorization Independence is achieved by avoiding the need for `get()` calls in security rules. This is accomplished by structuring data in a way that authorization is path-based. For instance, user preferences are stored under `/users/{userId}/preferences`, ensuring that access control is directly tied to the user's ID.\n\nThe structure supports QAPs by using structural segregation. Each collection has a homogeneous security posture, allowing for secure `list` operations. For example, listing locations requires no filtering based on user roles or permissions, as all documents in the `/locations` collection are accessible to all users."
+  }
+}

@@ -1,0 +1,139 @@
+/**
+ * @file Firestore Security Rules
+ * @description This ruleset defines access control for the Weather App's Firestore database.
+ *
+ * Core Philosophy:
+ *  This ruleset prioritizes a secure-by-default approach, with a focus on path-based authorization and clear ownership models.
+ *  User-specific data is stored under `/users/{userId}` and is accessible only to the authenticated user.
+ *  Public data, such as weather forecasts and locations, is stored in top-level collections and is generally readable by all users.
+ *  Write access to public data is restricted to prevent unauthorized modifications.
+ *
+ * Data Structure:
+ *  - `/locations/{locationId}`: Stores geographical location data. Publicly readable.
+ *  - `/current_weather/{weatherId}`: Stores current weather conditions. Publicly readable.
+ *  - `/hourly_forecasts/{forecastId}`: Stores hourly weather forecasts. Publicly readable.
+ *  - `/daily_forecasts/{forecastId}`: Stores daily weather forecasts. Publicly readable.
+ *  - `/users/{userId}/preferences/{preferencesId}`: Stores user preferences. Only accessible to the owner.
+ *  - `/weather_news/{newsId}`: Stores weather-related news articles. Publicly readable.
+ *
+ * Key Security Decisions:
+ *  - User listing is disabled for privacy.
+ *  - All write operations require authentication.
+ *  - Data validation is limited to essential checks for authorization and relational integrity (e.g., matching user IDs in paths and documents).
+ *  - Read operations are generally open for public data, while write operations are restricted to authorized users.
+ *
+ * Denormalization for Authorization:
+ *  The data structure uses path-based authorization (e.g., `/users/{userId}/preferences/{preferenceId}`) to avoid `get()` calls in security rules.
+ *  This approach ensures that authorization checks are efficient and scalable.
+ *
+ * Structural Segregation:
+ *  Public data (e.g., weather forecasts, locations) and private data (e.g., user preferences) are stored in separate collections to simplify security rules and enhance performance.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Allows read access to all locations. Write access is denied.
+     * @path /locations/{locationId}
+     * @allow (get, list) - Any user can read location data.
+     * @deny (create, update, delete) - No user can create, update, or delete location data.
+     * @principle Public read access for locations.
+     */
+    match /locations/{locationId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read access to all current weather data. Write access is denied.
+     * @path /current_weather/{weatherId}
+     * @allow (get, list) - Any user can read current weather data.
+     * @deny (create, update, delete) - No user can create, update, or delete current weather data.
+     * @principle Public read access for current weather data.
+     */
+    match /current_weather/{weatherId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read access to all hourly forecasts. Write access is denied.
+     * @path /hourly_forecasts/{forecastId}
+     * @allow (get, list) - Any user can read hourly forecast data.
+     * @deny (create, update, delete) - No user can create, update, or delete hourly forecast data.
+     * @principle Public read access for hourly forecast data.
+     */
+    match /hourly_forecasts/{forecastId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read access to all daily forecasts. Write access is denied.
+     * @path /daily_forecasts/{forecastId}
+     * @allow (get, list) - Any user can read daily forecast data.
+     * @deny (create, update, delete) - No user can create, update, or delete daily forecast data.
+     * @principle Public read access for daily forecast data.
+     */
+    match /daily_forecasts/{forecastId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Manages user preferences. Only the authenticated user can read, create, update, or delete their own preferences.
+     * @path /users/{userId}/preferences/{preferencesId}
+     * @allow (create) - User can create their own preferences if the userId matches the authenticated user's ID.
+     * @allow (get, list, update, delete) - User can get, list, update, or delete their own preferences if the userId matches the authenticated user's ID.
+     * @deny (create, get, list, update, delete) - Any other user cannot create, get, list, update, or delete these preferences.
+     * @principle Enforces user-ownership for user preferences.
+     */
+    match /users/{userId}/preferences/{preferencesId} {
+      allow read, list: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isSignedIn() && isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isSignedIn() && isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows read access to all weather news articles. Write access is denied.
+     * @path /weather_news/{newsId}
+     * @allow (get, list) - Any user can read weather news articles.
+     * @deny (create, update, delete) - No user can create, update, or delete weather news articles.
+     * @principle Public read access for weather news.
+     */
+    match /weather_news/{newsId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    // ---- Helper functions ----
+
+    /**
+     * @description Checks if the user is signed in.
+     * @return True if the user is signed in, false otherwise.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the user is the owner of the document.
+     * @param userId The user ID to check against.
+     * @return True if the user is the owner, false otherwise.
+     */
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the user is the owner of the existing document.
+     * @param userId The user ID to check against.
+     * @return True if the user is the owner and the document exists, false otherwise.
+     */
+    function isExistingOwner(userId) {
+      return isSignedIn() && isOwner(userId) && resource != null;
+    }
+  }
+}
