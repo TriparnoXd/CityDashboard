@@ -41,7 +41,6 @@ export default function LoginPage() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const [googleLoading, setGoogleLoading] = React.useState(false);
   
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
@@ -71,11 +70,11 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
+    setLoading(true);
     initiateGoogleSignIn(auth);
     // The onAuthStateChanged listener will handle redirection. We set a timeout
     // to remove the loading spinner if the popup is closed.
-    setTimeout(() => setGoogleLoading(false), 5000);
+    setTimeout(() => setLoading(false), 5000);
   }
 
   if (isUserLoading || user) {
@@ -105,7 +104,7 @@ export default function LoginPage() {
               required 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={loading || googleLoading}
+              disabled={loading}
             />
           </div>
           <div className="grid gap-2">
@@ -117,10 +116,10 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
-              disabled={loading || googleLoading}
+              disabled={loading}
             />
           </div>
-          <Button className="w-full mt-2" onClick={handleSignIn} disabled={loading || googleLoading}>
+          <Button className="w-full mt-2" onClick={handleSignIn} disabled={loading}>
             {loading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
             Sign in
           </Button>
@@ -134,8 +133,8 @@ export default function LoginPage() {
               </span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={loading || googleLoading}>
-            {googleLoading ? (
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={loading}>
+            {loading ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <GoogleIcon className="mr-2 h-4 w-4" />
