@@ -1,70 +1,70 @@
 /**
- * @fileOverview Firestore Security Rules for the application.
+ * @file Firebase Security Rules for Firestore.
  *
  * Core Philosophy:
- * This ruleset enforces a strict user-ownership model. Each user can only
- * read and write their own data.
+ * This ruleset enforces a strict user-ownership model for all data stored under the `/users/{userId}` path. Users can only read and write their own data.
  *
  * Data Structure:
- * All user data is stored under the `/users/{userId}` path.
+ * All user data is nested under the `/users/{userId}` collection. Each document represents a single user's profile and preferences.
  *
  * Key Security Decisions:
- * - Users can only read their own profile data.
- * - Users can only modify their own profile data.
- * - Listing all users is explicitly forbidden.
- *
- * Denormalization for Authorization:
- * The `userId` is used in the path `/users/{userId}` and MUST match the
- * `uid` field in the document itself upon creation. Updates must not
- * change this `uid` field.
+ * - User listing is explicitly disallowed.
+ * - Data consistency between the path and document ID is enforced on create and update.
+ * - Only authenticated users can access data.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Manages access to user profiles. Each user can only read and write their own data.
-     * @path /users/{userId}
-     * @allow (get) User with UID 'CxUOCOd86pTgfgcVxW0aoqLnvs53' can read their own profile data.
-     * @allow (create) User with UID 'CxUOCOd86pTgfgcVxW0aoqLnvs53' can create their profile data.
-     * @allow (update) User with UID 'CxUOCOd86pTgfgcVxW0aoqLnvs53' can update their own profile data.
-     * @allow (delete) User with UID 'CxUOCOd86pTgfgcVxW0aoqLnvs53' can delete their own profile data.
-     * @deny (get) User with UID 'otherUserId' cannot read the profile data of 'CxUOCOd86pTgfgcVxW0aoqLnvs53'.
-     * @deny (create) User with UID 'otherUserId' cannot create a profile for 'CxUOCOd86pTgfgcVxW0aoqLnvs53'.
-     * @deny (update) User with UID 'otherUserId' cannot update the profile data of 'CxUOCOd86pTgfgcVxW0aoqLnvs53'.
-     * @deny (delete) User with UID 'otherUserId' cannot delete the profile data of 'CxUOCOd86pTgfgcVxW0aoqLnvs53'.
-     * @principle Enforces user-ownership for all data access.
+     * @description Enforces user-ownership for documents under /users/{userId}.
+     * @path /databases/{database}/documents/users/{userId}
+     * @allow (create) - Allow user with UID 'user_abc' to create their own document.
+     *   Request: { "auth": { "uid": "user_abc" }, "resource": { "data": { "uid": "user_abc", "email": "test@example.com" } } }
+     * @allow (get, update, delete) - Allow user with UID 'user_abc' to get, update, and delete their own document.
+     *   Request: { "auth": { "uid": "user_abc" } }
+     * @deny (create) - Deny user with UID 'user_def' from creating a document for 'user_abc'.
+     *   Request: { "auth": { "uid": "user_def" }, "resource": { "data": { "uid": "user_abc", "email": "test@example.com" } } }
+     * @deny (get, update, delete) - Deny user with UID 'user_def' from getting, updating, and deleting the document of 'user_abc'.
+     *   Request: { "auth": { "uid": "user_def" } }
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId} {
-      // Helper function to check if the user is signed in.
-      function isSignedIn() {
-        return request.auth != null;
-      }
-
-      // Helper function to check if the authenticated user is the owner of the document.
-      function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
-      }
-
-      // Helper function to check if the authenticated user is the existing owner of the document.
-      function isExistingOwner(userId) {
-        return isOwner(userId) && resource != null;
-      }
-
-      // Allow a user to read their own profile.
       allow get: if isOwner(userId);
-
-      // Prevent listing of all users.
       allow list: if false;
-
-      // Allow a user to create their own profile, enforcing uid consistency.
-      allow create: if isOwner(userId) && request.resource.data.uid == userId;
-
-      // Allow a user to update their own profile, preventing uid changes.
-      allow update: if isExistingOwner(userId) && request.resource.data.uid == resource.data.uid;
-
-      // Allow a user to delete their own profile.
+      allow create: if isSignedIn() && isSelfCreation(userId) && request.resource.data.uid == userId;
+      allow update: if isSignedIn() && isExistingOwner(userId) && request.resource.data.uid == resource.data.uid;
       allow delete: if isExistingOwner(userId);
+    }
+
+    // ---- Helper functions ----
+
+    /**
+     * @description Checks if the user is signed in.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the request is made by the owner of the resource.
+     */
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the request is to create own resource.
+     */
+    function isSelfCreation(userId) {
+        return request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the request is made by the existing owner of the resource and the document exists.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
     }
   }
 }

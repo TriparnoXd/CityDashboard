@@ -29,20 +29,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
 import { User, LogOut, LoaderCircle } from 'lucide-react'
-import { useAuth, useUser, useFirestore, useDoc, useMemoFirebase, setDocumentNonBlocking } from '@/firebase'
+import { useAuth, useUser } from '@/firebase'
 import { signOut } from 'firebase/auth'
-import { doc, DocumentData } from 'firebase/firestore'
-
-interface UserPreferences {
-  location: string;
-  unit: Unit;
-}
 
 export default function DashboardPage() {
   const router = useRouter()
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
-  const firestore = useFirestore();
   
   const [location, setLocation] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
@@ -54,34 +47,16 @@ export default function DashboardPage() {
     'Chennai', 'Bengaluru', 'Hyderabad', 'Jaipur'
   ];
 
-  const userPrefsRef = useMemoFirebase(() => {
-    if (!firestore || !user) return null;
-    return doc(firestore, 'users', user.uid);
-  }, [firestore, user]);
-
-  const { data: userPrefs, isLoading: isPrefsLoading } = useDoc<UserPreferences>(userPrefsRef);
-
   React.useEffect(() => {
     if (!isUserLoading && !user) {
       router.push('/');
     }
   }, [user, isUserLoading, router]);
-
-  React.useEffect(() => {
-    if (userPrefs) {
-      setLocation(userPrefs.location || 'London');
-      setUnit(userPrefs.unit || 'C');
-    }
-  }, [userPrefs]);
   
   React.useEffect(() => {
     const data = getWeatherData(location)
     setWeatherData(data)
-    if (user && firestore && !isPrefsLoading) {
-      const userRef = doc(firestore, 'users', user.uid);
-      setDocumentNonBlocking(userRef, { location, unit }, { merge: true });
-    }
-  }, [location, unit, user, firestore, isPrefsLoading]);
+  }, [location]);
 
   const handleLocationSelect = (newLocation: string) => {
     setLocation(newLocation);
@@ -96,7 +71,7 @@ export default function DashboardPage() {
     router.push('/');
   }
 
-  if (isUserLoading || isPrefsLoading || !user || !weatherData) {
+  if (isUserLoading || !user || !weatherData) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <LoaderCircle className="h-10 w-10 animate-spin" />
