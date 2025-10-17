@@ -28,17 +28,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
-import { User, LogOut } from 'lucide-react'
-
-// Mock user data
-const mockUser = {
-  displayName: 'Test User',
-  email: 'test@example.com',
-  photoURL: '',
-};
+import { User, LogOut, LoaderCircle } from 'lucide-react'
+import { useAuth, useUser } from '@/firebase'
+import { signOut } from 'firebase/auth'
 
 export default function DashboardPage() {
   const router = useRouter()
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
   
   const [location, setLocation] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
@@ -50,6 +47,12 @@ export default function DashboardPage() {
   ];
 
   React.useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/');
+    }
+  }, [user, isUserLoading, router]);
+
+  React.useEffect(() => {
     const data = getWeatherData(location)
     setWeatherData(data)
   }, [location])
@@ -59,14 +62,14 @@ export default function DashboardPage() {
   };
   
   const handleLogout = async () => {
-    // In a real app, you'd clear the auth token here
+    await signOut(auth);
     router.push('/');
   }
 
-  if (!weatherData) {
+  if (isUserLoading || !user || !weatherData) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        Loading...
+        <LoaderCircle className="h-10 w-10 animate-spin" />
       </div>
     )
   }
@@ -95,7 +98,7 @@ export default function DashboardPage() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={mockUser.photoURL ?? ''} alt={mockUser.displayName ?? 'User'} />
+                  <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
                   <AvatarFallback>
                     <User />
                   </AvatarFallback>
@@ -105,9 +108,9 @@ export default function DashboardPage() {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{mockUser.displayName}</p>
+                  <p className="text-sm font-medium leading-none">{user.displayName}</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    {mockUser.email}
+                    {user.email}
                   </p>
                 </div>
               </DropdownMenuLabel>

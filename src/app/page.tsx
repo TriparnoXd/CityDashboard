@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -17,6 +16,10 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 import { LoaderCircle } from "lucide-react"
+import { useAuth, useUser } from "@/firebase"
+import { Auth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { initiateEmailSignIn } from "@/firebase"
+
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -25,6 +28,13 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 )
 
+const initiateGoogleSignIn = (auth: Auth) => {
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(auth, provider).catch(error => {
+    console.error("Google Sign-In Error:", error);
+  });
+};
+
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
@@ -32,38 +42,48 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [googleLoading, setGoogleLoading] = React.useState(false);
+  
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
+
+  React.useEffect(() => {
+    if (!isUserLoading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, isUserLoading, router]);
+
 
   const handleSignIn = async () => {
     setLoading(true);
-    // This is a mock implementation. For a real app, you would not have a hardcoded user.
-    if (email === 'test@example.com' && password === 'password') {
-      // In a real app, you'd get a token from your backend and store it.
-      // For this dummy implementation, we just navigate.
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 1000);
-    } else {
-      setTimeout(() => {
+    initiateEmailSignIn(auth, email, password);
+    // The onAuthStateChanged listener in FirebaseProvider will handle the redirect
+    // and potential errors. For this example, we'll keep the toast for immediate feedback.
+    setTimeout(() => {
+      if (!auth.currentUser) {
         toast({
           variant: "destructive",
           title: "Login Failed",
           description: "Invalid email or password.",
         });
         setLoading(false);
-      }, 1000);
-    }
+      }
+    }, 2000);
   };
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    // This is a mock implementation. For a real app, you would handle the Google OAuth flow.
-    setTimeout(() => {
-        toast({
-            title: "Feature not implemented",
-            description: "Google Sign-In will be available soon.",
-        });
-        setGoogleLoading(false);
-    }, 1000);
+    initiateGoogleSignIn(auth);
+    // The onAuthStateChanged listener will handle redirection. We set a timeout
+    // to remove the loading spinner if the popup is closed.
+    setTimeout(() => setGoogleLoading(false), 5000);
+  }
+
+  if (isUserLoading || user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <LoaderCircle className="h-10 w-10 animate-spin" />
+      </div>
+    );
   }
 
   return (
@@ -73,8 +93,6 @@ export default function LoginPage() {
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
             Enter your email below to login to your account.
-            <br />
-            Use <span className="font-mono text-primary">test@example.com</span> and <span className="font-mono text-primary">password</span>
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
