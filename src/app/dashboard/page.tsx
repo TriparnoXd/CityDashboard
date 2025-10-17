@@ -29,22 +29,37 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
 import { User, LogOut, LoaderCircle } from 'lucide-react'
-import { useAuth, useUser } from '@/firebase'
+import { useAuth, useUser, useFirestore, useDoc, useMemoFirebase, setDocumentNonBlocking } from '@/firebase'
 import { signOut } from 'firebase/auth'
+import { doc, DocumentData } from 'firebase/firestore'
+
+interface UserPreferences {
+  location: string;
+  unit: Unit;
+}
 
 export default function DashboardPage() {
   const router = useRouter()
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
   
   const [location, setLocation] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
+  
   const locations = [
     'London', 'New York', 'Tokyo', 'Paris', 'Berlin', 'Moscow', 
     'Beijing', 'Sydney', 'Cairo', 'New Delhi', 'Mumbai', 'Kolkata',
     'Chennai', 'Bengaluru', 'Hyderabad', 'Jaipur'
   ];
+
+  const userPrefsRef = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [firestore, user]);
+
+  const { data: userPrefs, isLoading: isPrefsLoading } = useDoc<UserPreferences>(userPrefsRef);
 
   React.useEffect(() => {
     if (!isUserLoading && !user) {
@@ -53,20 +68,35 @@ export default function DashboardPage() {
   }, [user, isUserLoading, router]);
 
   React.useEffect(() => {
+    if (userPrefs) {
+      setLocation(userPrefs.location || 'London');
+      setUnit(userPrefs.unit || 'C');
+    }
+  }, [userPrefs]);
+  
+  React.useEffect(() => {
     const data = getWeatherData(location)
     setWeatherData(data)
-  }, [location])
+    if (user && firestore && !isPrefsLoading) {
+      const userRef = doc(firestore, 'users', user.uid);
+      setDocumentNonBlocking(userRef, { location, unit }, { merge: true });
+    }
+  }, [location, unit, user, firestore, isPrefsLoading]);
 
   const handleLocationSelect = (newLocation: string) => {
     setLocation(newLocation);
   };
   
+  const handleUnitChange = (newUnit: Unit) => {
+    setUnit(newUnit);
+  }
+
   const handleLogout = async () => {
     await signOut(auth);
     router.push('/');
   }
 
-  if (isUserLoading || !user || !weatherData) {
+  if (isUserLoading || isPrefsLoading || !user || !weatherData) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <LoaderCircle className="h-10 w-10 animate-spin" />
@@ -81,7 +111,7 @@ export default function DashboardPage() {
           City Pulse
         </h1>
         <div className="flex items-center gap-4">
-          <Select onValueChange={handleLocationSelect} defaultValue={location}>
+          <Select onValueChange={handleLocationSelect} defaultValue={location} value={location}>
             <SelectTrigger className="w-[180px] sm:w-[200px]">
               <SelectValue placeholder="Select a location" />
             </SelectTrigger>
@@ -93,7 +123,7 @@ export default function DashboardPage() {
               ))}
             </SelectContent>
           </Select>
-          <UnitToggle unit={unit} setUnit={setUnit} />
+          <UnitToggle unit={unit} setUnit={handleUnitChange} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
@@ -141,7 +171,7 @@ export default function DashboardPage() {
            <WeatherSummary weatherData={weatherData} />
         </div>
         
-        <div className="md:col-span-1 lg:col-span-2 xl:col-span-3">
+        <div className="md-col-span-1 lg:col-span-2 xl:col-span-3">
             <WeatherNews news={weatherData.news} />
         </div>
 
