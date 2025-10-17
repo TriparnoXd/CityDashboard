@@ -17,8 +17,7 @@ import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 import { LoaderCircle } from "lucide-react"
 import { useAuth, useUser } from "@/firebase"
-import { Auth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
-import { initiateEmailSignIn } from "@/firebase"
+import { initiateEmailSignIn, initiateGoogleSignIn } from "@/firebase"
 
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -27,13 +26,6 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
         <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.05 1.05-2.86 2.25-4.82 2.25-3.44 0-6.24-2.82-6.24-6.3s2.8-6.3 6.24-6.3c1.88 0 3.24.75 4.03 1.5l2.43-2.32C17.43 2.92 15.21 2 12.48 2 7.19 2 3.1 5.9 3.1 11s4.09 9 9.38 9c5.17 0 9.1-3.53 9.1-9.25 0-.75-.08-1.25-.18-1.83H12.48z" fill="currentColor"></path>
     </svg>
 )
-
-const initiateGoogleSignIn = (auth: Auth) => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider).catch(error => {
-    console.error("Google Sign-In Error:", error);
-  });
-};
 
 export default function LoginPage() {
   const router = useRouter();
