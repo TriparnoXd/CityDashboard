@@ -65,7 +65,7 @@ export default function DashboardPage() {
      if (userDocRef) {
       if (userData === null) {
         // Document does not exist, create it with UID
-        setDocumentNonBlocking(userDocRef, { uid: user?.uid, location, unit }, {});
+        setDocumentNonBlocking(userDocRef, { uid: user?.uid, location, unit }, { merge: true });
       } else if (userData.location !== location) {
         // Document exists, update only location
         updateDocumentNonBlocking(userDocRef, { location });
@@ -105,7 +105,7 @@ export default function DashboardPage() {
           <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
             Clear Sky
           </h1>
-          <CityCompareDialog />
+          <CityCompareDialog unit={unit} />
         </div>
         <div className="flex items-center gap-4">
           <LocationSearch onLocationSelect={handleLocationSelect} currentLocation={location} />

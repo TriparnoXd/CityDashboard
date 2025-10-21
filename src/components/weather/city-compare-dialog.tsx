@@ -12,13 +12,19 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Map, ArrowRight, LoaderCircle, Sparkles } from "lucide-react"
+import { Map, ArrowRight, LoaderCircle, Sparkles, Calendar } from "lucide-react"
 import LocationSearch from "./location-search"
-import { getWeatherData } from "@/lib/weather-data"
-import type { WeatherData } from "@/lib/types"
+import { getWeatherData, convertTemperature } from "@/lib/weather-data"
+import type { WeatherData, Unit } from "@/lib/types"
 import { getTravelRecommendation } from "@/app/actions"
+import WeatherIcon from "./weather-icon"
+import { Separator } from "../ui/separator"
 
-export default function CityCompareDialog() {
+interface CityCompareDialogProps {
+    unit: Unit;
+}
+
+export default function CityCompareDialog({ unit }: CityCompareDialogProps) {
   const [open, setOpen] = React.useState(false)
   const [cityA, setCityA] = React.useState<string | null>(null)
   const [cityB, setCityB] = React.useState<string | null>(null)
@@ -40,17 +46,17 @@ export default function CityCompareDialog() {
   }, [cityB])
 
   React.useEffect(() => {
-    if (weatherA && weatherB) {
+    if (weatherA && weatherB && cityA && cityB) {
       startTransition(async () => {
         const result = await getTravelRecommendation({
           cityA: {
-            name: cityA!,
+            name: cityA,
             temperature: weatherA.current.temperature,
             weatherConditions: weatherA.current.weatherConditions,
             dailyForecast: weatherA.dailyForecast,
           },
           cityB: {
-            name: cityB!,
+            name: cityB,
             temperature: weatherB.current.temperature,
             weatherConditions: weatherB.current.weatherConditions,
             dailyForecast: weatherB.dailyForecast,
@@ -80,22 +86,17 @@ export default function CityCompareDialog() {
           <span className="sr-only">Compare Cities</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>City Weather Comparison</DialogTitle>
           <DialogDescription>
             Select two cities to compare their weather and get an AI travel recommendation.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-muted-foreground">From</h3>
-            <LocationSearch onLocationSelect={setCityA} currentLocation={cityA || "Select City A"} />
-          </div>
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-muted-foreground">To</h3>
-            <LocationSearch onLocationSelect={setCityB} currentLocation={cityB || "Select City B"} />
-          </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_1fr] items-center">
+          <LocationSearch onLocationSelect={setCityA} currentLocation={cityA || "Select City A"} />
+          <ArrowRight className="h-5 w-5 text-muted-foreground mx-auto" />
+          <LocationSearch onLocationSelect={setCityB} currentLocation={cityB || "Select City B"} />
         </div>
         
         {isPending && (
@@ -115,9 +116,66 @@ export default function CityCompareDialog() {
                 </CardContent>
             </Card>
         )}
+
+        {!isPending && weatherA && weatherB && (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base font-semibold">
+                        <Calendar className="h-5 w-5 text-muted-foreground" />
+                        7-Day Forecast Comparison
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-[1fr_1fr] gap-4">
+                        <div>
+                             <h3 className="font-semibold text-center mb-2">{cityA}</h3>
+                             <ul className="space-y-1">
+                                {weatherA.dailyForecast.map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        <li className="flex items-center justify-between p-1.5 rounded-md hover:bg-muted/50">
+                                            <p className="w-1/4 font-medium text-sm">{item.day}</p>
+                                            <div className="flex w-1/4 items-center justify-center">
+                                                <WeatherIcon condition={item.weatherConditions} className="h-5 w-5 text-primary" />
+                                            </div>
+                                            <p className="w-1/2 text-right text-sm font-medium text-muted-foreground">
+                                                <span className="text-foreground">{convertTemperature(item.highTemperature, unit)}°</span>
+                                                {' / '}
+                                                <span>{convertTemperature(item.lowTemperature, unit)}°</span>
+                                            </p>
+                                        </li>
+                                       {index < weatherA.dailyForecast.length - 1 && <Separator />}
+                                    </React.Fragment>
+                                ))}
+                             </ul>
+                        </div>
+                         <div>
+                             <h3 className="font-semibold text-center mb-2">{cityB}</h3>
+                             <ul className="space-y-1">
+                                {weatherB.dailyForecast.map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        <li className="flex items-center justify-between p-1.5 rounded-md hover:bg-muted/50">
+                                            <p className="w-1/4 font-medium text-sm">{item.day}</p>
+                                            <div className="flex w-1/4 items-center justify-center">
+                                                <WeatherIcon condition={item.weatherConditions} className="h-5 w-5 text-primary" />
+                                            </div>
+                                            <p className="w-1/2 text-right text-sm font-medium text-muted-foreground">
+                                                <span className="text-foreground">{convertTemperature(item.highTemperature, unit)}°</span>
+                                                {' / '}
+                                                <span>{convertTemperature(item.lowTemperature, unit)}°</span>
+                                            </p>
+                                        </li>
+                                        {index < weatherB.dailyForecast.length - 1 && <Separator />}
+                                    </React.Fragment>
+                                ))}
+                             </ul>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        )}
         
-        {(cityA || cityB) && (
-            <Button variant="outline" size="sm" onClick={handleReset} className="w-fit">
+        {(cityA || cityB) && !isPending && (
+            <Button variant="outline" size="sm" onClick={handleReset} className="w-fit mt-4">
                 Reset
             </Button>
         )}
