@@ -1,6 +1,6 @@
-# Clear Sky Weather
+# CityDashboard
 
-Clear Sky is a modern, responsive weather dashboard that provides real-time weather information, AI-powered summaries, and a unique city comparison tool to help you plan your travels.
+CityDashboard is a modern, responsive weather dashboard that provides real-time weather information, AI-powered summaries, and a unique city comparison tool to help you plan your travels.
 
 ## Features
 
@@ -36,8 +36,8 @@ Follow these instructions to set up and run the project on your local machine.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/clear-sky-weather.git
-    cd clear-sky-weather
+    git clone https://github.com/your-username/city-dashboard.git
+    cd city-dashboard
     ```
 
 2.  **Install dependencies:**

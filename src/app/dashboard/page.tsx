@@ -103,7 +103,7 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm md:px-8">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
-            Clear Sky
+            CityDashboard
           </h1>
           <CityCompareDialog unit={unit} />
         </div>
