@@ -50,4 +50,3 @@ export async function getPlacePredictions(input: string) {
     return [];
   }
 }
-
