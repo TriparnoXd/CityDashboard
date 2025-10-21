@@ -1,82 +1,59 @@
 /**
- * @fileoverview Firestore Security Rules for the weather app.
+ * @fileoverview Firestore Security Rules for the application.
  *
  * Core Philosophy:
- * This ruleset enforces a strict user-ownership model, where each user can only
- * read and write their own data. This protects user privacy and prevents
- * unauthorized access to personal information.
+ * This ruleset enforces a strict user-ownership model for all user-specific data.
+ * Each user can only read and write their own data.
  *
  * Data Structure:
- * All user data is stored under the `/users/{userId}` path.  Each document
- * contains user profile information, weather location preferences, and
- * preferred temperature units.
+ * - /users/{userId}: Stores user profile information. The {userId} in the path
+ *   must match the authenticated user's UID.
  *
  * Key Security Decisions:
- * - Users can only access their own documents. Listing all users is explicitly
- *   denied to protect user privacy.
- * - No admin roles are defined; the application relies solely on user-based
- *   authorization.
- * - The rules are structured to be auditable and maintainable, with complex
- *   logic abstracted into helper functions.
+ * - User listing is disallowed to protect privacy.
+ * - The location property is writable by the user.
  *
  * Denormalization for Authorization:
- * To avoid costly `get()` calls, the user ID is embedded within the document
- * itself (the document ID is equal to the user ID). This allows rules to
- * quickly verify ownership without additional database reads.
- *
- * Structural Segregation:
- * All user data is stored in a private user subcollection, ensuring that
- * personal information is not publicly accessible. There is no need to
- * segregate public versus private fields within a single document.
+ * No denormalization is needed in this case as the userId can be accessed
+ * via request.auth.uid and compared to the document id.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Checks if the user is signed in.
-     * @return {boolean} True if the user is signed in, false otherwise.
-     */
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    /**
-     * @description Checks if the request is made by the owner of the user document.
-     * @param {string} userId The user ID to compare against the request's authentication UID.
-     * @return {boolean} True if the user ID matches the authenticated user's UID.
-     */
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    /**
-     * @description Checks if the request is made by the owner of the user document, and that the document exists.
-     * @param {string} userId The user ID to compare against the request's authentication UID.
-     * @return {boolean} True if the user ID matches the authenticated user's UID and the resource exists.
-     */
-    function isExistingOwner(userId) {
-      return isOwner(userId) && resource != null;
-    }
-
-    /**
-     * @description Rules for user documents.
-     * @path /users/{userId}
-     * @allow (create) Signed-in user can create their own document. Example: User with UID 'user123' creates a document at /users/user123.
-     * @allow (get) Signed-in user can read their own document. Example: User with UID 'user123' reads the document at /users/user123.
-     * @allow (update) Signed-in user can update their own document. Example: User with UID 'user123' updates the document at /users/user123.
-     * @allow (delete) Signed-in user can delete their own document. Example: User with UID 'user123' deletes the document at /users/user123.
-     * @deny (create) Signed-in user tries to create a document with a different user ID. Example: User with UID 'user123' tries to create a document at /users/user456.
-     * @deny (get) Signed-in user tries to read another user's document. Example: User with UID 'user123' tries to read the document at /users/user456.
-     * @deny (update) Signed-in user tries to update another user's document. Example: User with UID 'user123' tries to update the document at /users/user456.
-     * @deny (delete) Signed-in user tries to delete another user's document. Example: User with UID 'user123' tries to delete the document at /users/user456.
-     * @principle Enforces document ownership for all operations.
+     * @description Controls access to user profiles. Only the authenticated user can read and write their own profile.
+     * @path /databases/{database}/documents/users/{userId}
+     * @allow (create) User with uid "CxUOCOd86pTgfgcVxW0aoqLnvs53" can create their own profile.
+     * @allow (update) User with uid "CxUOCOd86pTgfgcVxW0aoqLnvs53" can update their own profile.
+     * @allow (delete) User with uid "CxUOCOd86pTgfgcVxW0aoqLnvs53" can delete their own profile.
+     * @deny (create) User with uid "DIFFERENT_UID" cannot create a profile with ID "CxUOCOd86pTgfgcVxW0aoqLnvs53".
+     * @deny (update) User with uid "DIFFERENT_UID" cannot update the profile with ID "CxUOCOd86pTgfgcVxW0aoqLnvs53".
+     * @deny (delete) User with uid "DIFFERENT_UID" cannot delete the profile with ID "CxUOCOd86pTgfgcVxW0aoqLnvs53".
+     * @principle Enforces document ownership, ensuring users can only manage their own data.
      */
     match /users/{userId} {
-      allow create: if isOwner(userId) && request.resource.data.uid == userId;
+      // Helper function to check if the authenticated user is the owner of the document.
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      // Helper function to check if the authenticated user is the existing owner of the document.
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+
+      // Allow the user to read their own profile.
       allow get: if isOwner(userId);
       allow list: if false;
+
+      // Allow the user to create their own profile, but enforce that the userId in the path matches the uid in the data.
+      allow create: if isOwner(userId) && request.resource.data.uid == userId;
+
+      // Allow the user to update their own profile.
       allow update: if isExistingOwner(userId) && request.resource.data.uid == resource.data.uid;
+
+      // Allow the user to delete their own profile.
       allow delete: if isExistingOwner(userId);
     }
   }
