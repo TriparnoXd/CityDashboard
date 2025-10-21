@@ -37,14 +37,16 @@ export default function LocationSearch({ onLocationSelect, currentLocation }: Lo
   const [predictions, setPredictions] = React.useState<PlacePrediction[]>([])
   const [loading, setLoading] = React.useState(false)
   
-  React.useEffect(() => {
-    // When the popover is closed, sync the input value with the dashboard's current location.
-    // When it opens, allow the user to have independent control.
-    if (!open) {
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      // When popover closes, reset predictions and input value
+      setPredictions([]);
+    } else {
+      // When popover opens, initialize input with the current location
       setInputValue(currentLocation);
     }
-  }, [open, currentLocation]);
-
+  };
 
   const handleInputChange = async (value: string) => {
     setInputValue(value)
@@ -64,12 +66,12 @@ export default function LocationSearch({ onLocationSelect, currentLocation }: Lo
       onLocationSelect(selected.name)
       setInputValue(selected.name)
     }
-    setOpen(false)
+    handleOpenChange(false);
   }
 
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
