@@ -49,6 +49,10 @@ Follow these instructions to set up and run the project on your local machine.
     Create a `.env.local` file in the root of your project and add the necessary API keys. You can get these from your Firebase project settings and Google Cloud Console.
 
     ```
+    NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_firebase_project_id
+    
     PLACES_API_KEY=your_google_places_api_key
     GEMINI_API_KEY=your_ai_api_key
     ```
