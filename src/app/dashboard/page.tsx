@@ -12,6 +12,7 @@ import DailyForecast from '@/components/weather/daily-forecast'
 import WeatherSummary from '@/components/weather/weather-summary'
 import WeatherNews from '@/components/weather/weather-news'
 import LocationSearch from '@/components/weather/location-search'
+import CityCompareDialog from '@/components/weather/city-compare-dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,10 +23,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
-import { User, LogOut, LoaderCircle } from 'lucide-react'
+import { User, LogOut, LoaderCircle, Map } from 'lucide-react'
 import { useAuth, useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase'
 import { signOut } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
+import { updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase/non-blocking-updates'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -60,15 +62,13 @@ export default function DashboardPage() {
   React.useEffect(() => {
     const data = getWeatherData(location.split(',')[0]) // Use only city name for mock data
     setWeatherData(data)
-    if (userDocRef && user?.uid) {
-       if (userData === null) {
-        setDoc(userDocRef, { uid: user.uid, location, unit }).catch(error => {
-          console.error("Error creating user document:", error);
-        });
-      } else {
-        setDoc(userDocRef, { location }, { merge: true }).catch(error => {
-          console.error("Error updating location:", error);
-        });
+     if (userDocRef) {
+      if (userData === null) {
+        // Document does not exist, create it with UID
+        setDocumentNonBlocking(userDocRef, { uid: user?.uid, location, unit }, {});
+      } else if (userData.location !== location) {
+        // Document exists, update only location
+        updateDocumentNonBlocking(userDocRef, { location });
       }
     }
   }, [location, userDocRef, user?.uid, userData, unit]);
@@ -80,9 +80,7 @@ export default function DashboardPage() {
   const handleUnitChange = (newUnit: Unit) => {
     setUnit(newUnit);
      if (userDocRef) {
-      setDoc(userDocRef, { unit: newUnit }, { merge: true }).catch(error => {
-        console.error("Error updating unit:", error);
-      });
+      updateDocumentNonBlocking(userDocRef, { unit: newUnit });
     }
   }
 
@@ -103,9 +101,12 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm md:px-8">
-        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
-          Clear Sky
-        </h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+            Clear Sky
+          </h1>
+          <CityCompareDialog />
+        </div>
         <div className="flex items-center gap-4">
           <LocationSearch onLocationSelect={handleLocationSelect} currentLocation={location} />
           <UnitToggle unit={unit} setUnit={handleUnitChange} />
