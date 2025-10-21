@@ -3,24 +3,6 @@
 
 import { generateWeatherSummary, type GenerateWeatherSummaryInput } from '@/ai/flows/generate-weather-summary';
 import { compareCities, type CompareCitiesInput } from '@/ai/flows/compare-cities-flow';
-import { z } from 'zod';
-
-const CityWeatherInputSchema = z.object({
-  name: z.string().describe("The city's name."),
-  temperature: z.number().describe('The current temperature in Celsius.'),
-  weatherConditions: z.string().describe('A description of the current weather conditions, e.g., sunny, cloudy, rainy.'),
-  dailyForecast: z.array(z.object({
-    day: z.string(),
-    highTemperature: z.number(),
-    lowTemperature: z.number(),
-    weatherConditions: z.string(),
-  })).describe("The 7-day forecast for the city."),
-});
-
-const CompareCitiesInputSchema = z.object({
-  cityA: CityWeatherInputSchema.describe("The weather data for the origin city."),
-  cityB: CityWeatherInputSchema.describe("The weather data for the destination city."),
-});
 
 export async function getSummary(input: GenerateWeatherSummaryInput): Promise<string> {
   try {
@@ -44,12 +26,12 @@ export async function getTravelRecommendation(input: CompareCitiesInput): Promis
 
 
 export async function getPlacePredictions(input: string) {
-  if (!process.env.PLACES_API_KEY) {
+  if (!process.env.NEXT_PUBLIC_PLACES_API_KEY) {
     console.error('Places API key is not configured.');
     return [];
   }
 
-  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&types=(cities)&key=${process.env.PLACES_API_KEY}`;
+  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&types=(cities)&key=${process.env.NEXT_PUBLIC_PLACES_API_KEY}`;
 
   try {
     const response = await fetch(url);
