@@ -11,13 +11,7 @@ import HourlyForecast from '@/components/weather/hourly-forecast'
 import DailyForecast from '@/components/weather/daily-forecast'
 import WeatherSummary from '@/components/weather/weather-summary'
 import WeatherNews from '@/components/weather/weather-news'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import LocationSearch from '@/components/weather/location-search'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,12 +44,6 @@ export default function DashboardPage() {
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
   
-  const locations = [
-    'London', 'New York', 'Tokyo', 'Paris', 'Berlin', 'Moscow', 
-    'Beijing', 'Sydney', 'Cairo', 'New Delhi', 'Mumbai', 'Kolkata',
-    'Chennai', 'Bengaluru', 'Hyderabad', 'Jaipur'
-  ];
-
   React.useEffect(() => {
     if (!isUserLoading && !user) {
       router.push('/');
@@ -70,14 +58,14 @@ export default function DashboardPage() {
   }, [userData]);
   
   React.useEffect(() => {
-    const data = getWeatherData(location)
+    const data = getWeatherData(location.split(',')[0]) // Use only city name for mock data
     setWeatherData(data)
     if (userDocRef && user?.uid) {
-       if (userData === null) { // Document doesn't exist, create it.
+       if (userData === null) {
         setDoc(userDocRef, { uid: user.uid, location, unit }).catch(error => {
           console.error("Error creating user document:", error);
         });
-      } else { // Document exists, update it.
+      } else {
         setDoc(userDocRef, { location }, { merge: true }).catch(error => {
           console.error("Error updating location:", error);
         });
@@ -119,18 +107,7 @@ export default function DashboardPage() {
           Clear Sky
         </h1>
         <div className="flex items-center gap-4">
-          <Select onValueChange={handleLocationSelect} value={location}>
-            <SelectTrigger className="w-[180px] sm:w-[200px]">
-              <SelectValue placeholder="Select a location" />
-            </SelectTrigger>
-            <SelectContent>
-              {locations.map((loc) => (
-                <SelectItem key={loc} value={loc}>
-                  {loc}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <LocationSearch onLocationSelect={handleLocationSelect} currentLocation={location} />
           <UnitToggle unit={unit} setUnit={handleUnitChange} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
