@@ -58,8 +58,13 @@ export default function LocationSearch({ onLocationSelect, currentLocation }: Lo
     setOpen(false)
   }
 
+  // This effect ensures that if the parent component changes the location
+  // (e.g., on initial load from user profile), the input field reflects that change.
+  // It specifically checks if the new location is different to avoid unnecessary updates.
   React.useEffect(() => {
-    setInputValue(currentLocation);
+    if (currentLocation !== inputValue) {
+        setInputValue(currentLocation);
+    }
   }, [currentLocation]);
 
 
@@ -100,7 +105,7 @@ export default function LocationSearch({ onLocationSelect, currentLocation }: Lo
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      inputValue === prediction.name ? "opacity-100" : "opacity-0"
+                      currentLocation === prediction.name ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {prediction.name}
