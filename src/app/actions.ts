@@ -3,6 +3,24 @@
 
 import { generateWeatherSummary, type GenerateWeatherSummaryInput } from '@/ai/flows/generate-weather-summary';
 import { compareCities, type CompareCitiesInput } from '@/ai/flows/compare-cities-flow';
+import { z } from 'zod';
+
+const CityWeatherInputSchema = z.object({
+  name: z.string().describe("The city's name."),
+  temperature: z.number().describe('The current temperature in Celsius.'),
+  weatherConditions: z.string().describe('A description of the current weather conditions, e.g., sunny, cloudy, rainy.'),
+  dailyForecast: z.array(z.object({
+    day: z.string(),
+    highTemperature: z.number(),
+    lowTemperature: z.number(),
+    weatherConditions: z.string(),
+  })).describe("The 7-day forecast for the city."),
+});
+
+export const CompareCitiesInputSchema = z.object({
+  cityA: CityWeatherInputSchema.describe("The weather data for the origin city."),
+  cityB: CityWeatherInputSchema.describe("The weather data for the destination city."),
+});
 
 export async function getSummary(input: GenerateWeatherSummaryInput): Promise<string> {
   try {

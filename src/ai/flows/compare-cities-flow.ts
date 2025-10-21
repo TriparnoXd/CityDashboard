@@ -24,7 +24,7 @@ const CityWeatherInputSchema = z.object({
   })).describe("The 7-day forecast for the city."),
 });
 
-export const CompareCitiesInputSchema = z.object({
+const CompareCitiesInputSchema = z.object({
   cityA: CityWeatherInputSchema.describe("The weather data for the origin city."),
   cityB: CityWeatherInputSchema.describe("The weather data for the destination city."),
 });
