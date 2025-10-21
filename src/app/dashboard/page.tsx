@@ -52,28 +52,30 @@ export default function DashboardPage() {
   }, [user, isUserLoading, router]);
 
   React.useEffect(() => {
+    // This effect runs when userData is loaded from Firestore.
+    // It sets the initial location and unit from the user's profile.
     if (userData) {
-      if (userData.location) setLocation(userData.location);
-      if (userData.unit) setUnit(userData.unit);
+      const newLocation = userData.location || 'London';
+      const newUnit = userData.unit || 'C';
+      setLocation(newLocation);
+      setUnit(newUnit);
+      setWeatherData(getWeatherData(newLocation.split(',')[0]));
+    } else if (!isUserDataLoading && user) {
+        // This handles the case for a new user where userData is null.
+        // It creates the initial user document in Firestore.
+        setWeatherData(getWeatherData('London'));
+        if (userDocRef) {
+             setDoc(userDocRef, { uid: user.uid, location: 'London', unit: 'C' }, { merge: true });
+        }
     }
-  }, [userData]);
-  
-  React.useEffect(() => {
-    const data = getWeatherData(location.split(',')[0]) // Use only city name for mock data
-    setWeatherData(data)
-     if (userDocRef) {
-      if (userData === null) {
-        // Document does not exist, create it with UID
-        setDoc(userDocRef, { uid: user?.uid, location, unit }, { merge: true });
-      } else if (userData.location !== location) {
-        // Document exists, update only location
-        updateDoc(userDocRef, { location });
-      }
-    }
-  }, [location, userDocRef, user?.uid, userData, unit]);
+  }, [userData, isUserDataLoading, user, userDocRef]);
 
   const handleLocationSelect = (newLocation: string) => {
     setLocation(newLocation);
+    setWeatherData(getWeatherData(newLocation.split(',')[0]));
+    if (userDocRef) {
+      updateDoc(userDocRef, { location: newLocation });
+    }
   };
   
   const handleUnitChange = (newUnit: Unit) => {
