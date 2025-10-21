@@ -29,14 +29,24 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
 import { User, LogOut, LoaderCircle } from 'lucide-react'
-import { useAuth, useUser } from '@/firebase'
+import { useAuth, useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase'
 import { signOut } from 'firebase/auth'
+import { doc } from 'firebase/firestore'
+import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates'
 
 export default function DashboardPage() {
   const router = useRouter()
   const auth = useAuth();
+  const firestore = useFirestore();
   const { user, isUserLoading } = useUser();
   
+  const userDocRef = useMemoFirebase(() => {
+    if (!firestore || !user?.uid) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [firestore, user?.uid]);
+
+  const { data: userData, isLoading: isUserDataLoading } = useDoc(userDocRef);
+
   const [location, setLocation] = React.useState('London')
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
@@ -52,11 +62,21 @@ export default function DashboardPage() {
       router.push('/');
     }
   }, [user, isUserLoading, router]);
+
+  React.useEffect(() => {
+    if (userData) {
+      if (userData.location) setLocation(userData.location);
+      if (userData.unit) setUnit(userData.unit);
+    }
+  }, [userData]);
   
   React.useEffect(() => {
     const data = getWeatherData(location)
     setWeatherData(data)
-  }, [location]);
+    if (userDocRef) {
+      setDocumentNonBlocking(userDocRef, { location }, { merge: true });
+    }
+  }, [location, userDocRef]);
 
   const handleLocationSelect = (newLocation: string) => {
     setLocation(newLocation);
@@ -64,6 +84,9 @@ export default function DashboardPage() {
   
   const handleUnitChange = (newUnit: Unit) => {
     setUnit(newUnit);
+     if (userDocRef) {
+      setDocumentNonBlocking(userDocRef, { unit: newUnit }, { merge: true });
+    }
   }
 
   const handleLogout = async () => {
@@ -71,7 +94,7 @@ export default function DashboardPage() {
     router.push('/');
   }
 
-  if (isUserLoading || !user || !weatherData) {
+  if (isUserLoading || isUserDataLoading || !user || !weatherData) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <LoaderCircle className="h-10 w-10 animate-spin" />
@@ -86,7 +109,7 @@ export default function DashboardPage() {
           City Pulse
         </h1>
         <div className="flex items-center gap-4">
-          <Select onValueChange={handleLocationSelect} defaultValue={location} value={location}>
+          <Select onValueChange={handleLocationSelect} value={location}>
             <SelectTrigger className="w-[180px] sm:w-[200px]">
               <SelectValue placeholder="Select a location" />
             </SelectTrigger>

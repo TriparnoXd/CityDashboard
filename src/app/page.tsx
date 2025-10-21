@@ -32,7 +32,7 @@ export default function LoginPage() {
   const { toast } = useToast();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState<'google' | 'email' | false>(false);
   
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
@@ -45,7 +45,7 @@ export default function LoginPage() {
 
 
   const handleSignIn = async () => {
-    setLoading(true);
+    setLoading('email');
     initiateEmailSignIn(auth, email, password);
     // The onAuthStateChanged listener in FirebaseProvider will handle the redirect
     // and potential errors. For this example, we'll keep the toast for immediate feedback.
@@ -62,7 +62,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
-    setLoading(true);
+    setLoading('google');
     initiateGoogleSignIn(auth);
     // The onAuthStateChanged listener will handle redirection. We set a timeout
     // to remove the loading spinner if the popup is closed.
@@ -96,7 +96,7 @@ export default function LoginPage() {
               required 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
+              disabled={!!loading}
             />
           </div>
           <div className="grid gap-2">
@@ -108,11 +108,11 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
-              disabled={loading}
+              disabled={!!loading}
             />
           </div>
-          <Button className="w-full mt-2" onClick={handleSignIn} disabled={loading}>
-            {loading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+          <Button className="w-full mt-2" onClick={handleSignIn} disabled={!!loading}>
+            {loading === 'email' && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
             Sign in
           </Button>
            <div className="relative mt-2">
@@ -125,8 +125,8 @@ export default function LoginPage() {
               </span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={loading}>
-            {loading ? (
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={!!loading}>
+            {loading === 'google' ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <GoogleIcon className="mr-2 h-4 w-4" />
