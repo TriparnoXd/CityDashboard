@@ -17,7 +17,8 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 import { LoaderCircle } from "lucide-react"
-import { useAuth, useUser, initiateEmailSignUp } from "@/firebase"
+import { useAuth, useUser } from "@/firebase"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 
 
 export default function SignUpPage() {
@@ -40,7 +41,7 @@ export default function SignUpPage() {
     if (!auth) return;
     setLoading(true);
     try {
-      await initiateEmailSignUp(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       // The onAuthStateChanged listener will handle the redirect
       // after a successful sign-up.
     } catch (error: any) {

@@ -26,8 +26,7 @@ import { Button } from '@/components/ui/button'
 import { User, LogOut, LoaderCircle, Map } from 'lucide-react'
 import { useAuth, useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase'
 import { signOut } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
-import { updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase/non-blocking-updates'
+import { doc, setDoc, updateDoc } from 'firebase/firestore'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -65,10 +64,10 @@ export default function DashboardPage() {
      if (userDocRef) {
       if (userData === null) {
         // Document does not exist, create it with UID
-        setDocumentNonBlocking(userDocRef, { uid: user?.uid, location, unit }, { merge: true });
+        setDoc(userDocRef, { uid: user?.uid, location, unit }, { merge: true });
       } else if (userData.location !== location) {
         // Document exists, update only location
-        updateDocumentNonBlocking(userDocRef, { location });
+        updateDoc(userDocRef, { location });
       }
     }
   }, [location, userDocRef, user?.uid, userData, unit]);
@@ -80,7 +79,7 @@ export default function DashboardPage() {
   const handleUnitChange = (newUnit: Unit) => {
     setUnit(newUnit);
      if (userDocRef) {
-      updateDocumentNonBlocking(userDocRef, { unit: newUnit });
+      updateDoc(userDocRef, { unit: newUnit });
     }
   }
 

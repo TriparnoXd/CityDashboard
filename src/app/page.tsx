@@ -17,7 +17,12 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 import { LoaderCircle } from "lucide-react"
-import { useAuth, useUser, initiateEmailSignIn, initiateGoogleSignIn } from "@/firebase"
+import { useAuth, useUser } from "@/firebase"
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
 
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -47,28 +52,36 @@ export default function LoginPage() {
   const handleSignIn = async () => {
     if(!auth) return;
     setLoading('email');
-    initiateEmailSignIn(auth, email, password);
-    // The onAuthStateChanged listener in FirebaseProvider will handle the redirect
-    // and potential errors. For this example, we'll keep the toast for immediate feedback.
-    setTimeout(() => {
-      if (!auth.currentUser) {
-        toast({
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // onAuthStateChanged will handle the redirect
+    } catch (error: any) {
+       toast({
           variant: "destructive",
           title: "Login Failed",
           description: "Invalid email or password.",
         });
-        setLoading(false);
-      }
-    }, 2000);
+       setLoading(false);
+    }
   };
 
   const handleGoogleSignIn = async () => {
     if(!auth) return;
     setLoading('google');
-    initiateGoogleSignIn(auth);
-    // The onAuthStateChanged listener will handle redirection. We set a timeout
-    // to remove the loading spinner if the popup is closed.
-    setTimeout(() => setLoading(false), 5000);
+    const provider = new GoogleAuthProvider();
+    try {
+        await signInWithPopup(auth, provider);
+        // onAuthStateChanged will handle the redirect
+    } catch (error: any) {
+        if (error.code !== 'auth/popup-closed-by-user') {
+            toast({
+              variant: "destructive",
+              title: "Login Failed",
+              description: error.message || "Could not sign in with Google.",
+            });
+        }
+        setLoading(false);
+    }
   }
 
   if (isUserLoading || user) {
