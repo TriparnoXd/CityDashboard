@@ -41,7 +41,7 @@ export default function DashboardPage() {
 
   const { data: userData, isLoading: isUserDataLoading } = useDoc(userDocRef);
 
-  const [location, setLocation] = React.useState('London')
+  const [location, setLocation] = React.useState<string | null>(null)
   const [unit, setUnit] = React.useState<Unit>('C')
   const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null)
   
@@ -60,9 +60,11 @@ export default function DashboardPage() {
       setLocation(newLocation);
       setUnit(newUnit);
       setWeatherData(getWeatherData(newLocation.split(',')[0]));
-    } else if (!isUserDataLoading && user) {
+    } else if (!isUserDataLoading && user && !userData) {
         // This handles the case for a new user where userData is null.
         // It creates the initial user document in Firestore.
+        setLocation('London');
+        setUnit('C');
         setWeatherData(getWeatherData('London'));
         if (userDocRef) {
              setDoc(userDocRef, { uid: user.uid, location: 'London', unit: 'C' }, { merge: true });
@@ -91,7 +93,10 @@ export default function DashboardPage() {
     router.push('/');
   }
 
-  if (isUserLoading || isUserDataLoading || !user || !weatherData) {
+  // Combined loading state to prevent layout shifts.
+  const isLoading = isUserLoading || isUserDataLoading || !weatherData || !user;
+
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <LoaderCircle className="h-10 w-10 animate-spin" />
@@ -109,7 +114,7 @@ export default function DashboardPage() {
           <CityCompareDialog unit={unit} />
         </div>
         <div className="flex items-center gap-4">
-          <LocationSearch onLocationSelect={handleLocationSelect} currentLocation={location} />
+          <LocationSearch onLocationSelect={handleLocationSelect} currentLocation={location!} />
           <UnitToggle unit={unit} setUnit={handleUnitChange} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -143,7 +148,7 @@ export default function DashboardPage() {
 
       <main className="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 md:p-8">
         <div className="lg:col-span-2 xl:col-span-3">
-          <CurrentConditions data={weatherData.current} hourlyData={weatherData.hourlyForecast} unit={unit} location={location} />
+          <CurrentConditions data={weatherData.current} hourlyData={weatherData.hourlyForecast} unit={unit} location={location!} />
         </div>
 
         <div className="lg:col-span-2 xl:col-span-2">
