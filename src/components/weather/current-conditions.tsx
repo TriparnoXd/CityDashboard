@@ -1,22 +1,21 @@
 import React from 'react';
-import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Droplets, Wind } from 'lucide-react';
-import type { CurrentWeather, Unit } from '@/lib/types';
+import type { CurrentWeather, Unit, HourlyForecastItem } from '@/lib/types';
 import { convertTemperature } from '@/lib/weather-data';
 import WeatherIcon from './weather-icon';
+import HourlyChart from './hourly-chart';
 
 interface CurrentConditionsProps {
   data: CurrentWeather;
+  hourlyData: HourlyForecastItem[];
   unit: Unit;
   location: string;
-  imageUrl: string;
 }
 
-const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, location, imageUrl }) => {
+const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, hourlyData, unit, location }) => {
   const temp = convertTemperature(data.temperature, unit);
-  const aiHint = location.split(',')[0].toLowerCase().replace(' ', '');
-
+  
   return (
     <Card className="bg-card/70 backdrop-blur-sm transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-primary/30 cursor-pointer overflow-hidden">
       <CardContent className="p-0">
@@ -47,15 +46,8 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, unit, locat
               </div>
             </div>
           </div>
-          <div className="relative h-64 w-full">
-            <Image 
-              src={imageUrl}
-              alt={`Image of ${location}`} 
-              fill
-              className="object-cover object-center"
-              data-ai-hint={aiHint}
-              key={imageUrl}
-            />
+          <div className="relative h-64 w-full p-4">
+             <HourlyChart data={hourlyData} unit={unit} />
           </div>
         </div>
       </CardContent>

@@ -31,8 +31,7 @@ import { Button } from '@/components/ui/button'
 import { User, LogOut, LoaderCircle } from 'lucide-react'
 import { useAuth, useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase'
 import { signOut } from 'firebase/auth'
-import { doc } from 'firebase/firestore'
-import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates'
+import { doc, setDoc } from 'firebase/firestore'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -74,12 +73,17 @@ export default function DashboardPage() {
     const data = getWeatherData(location)
     setWeatherData(data)
     if (userDocRef && user?.uid) {
-       // When userData is null, it means the document doesn't exist yet.
-      // We need to include the uid for the 'create' operation to pass security rules.
-      const dataToSave = userData ? { location } : { location, uid: user.uid };
-      setDocumentNonBlocking(userDocRef, dataToSave, { merge: true });
+       if (userData === null) { // Document doesn't exist, create it.
+        setDoc(userDocRef, { uid: user.uid, location, unit }).catch(error => {
+          console.error("Error creating user document:", error);
+        });
+      } else { // Document exists, update it.
+        setDoc(userDocRef, { location }, { merge: true }).catch(error => {
+          console.error("Error updating location:", error);
+        });
+      }
     }
-  }, [location, userDocRef, user?.uid, userData]);
+  }, [location, userDocRef, user?.uid, userData, unit]);
 
   const handleLocationSelect = (newLocation: string) => {
     setLocation(newLocation);
@@ -88,7 +92,9 @@ export default function DashboardPage() {
   const handleUnitChange = (newUnit: Unit) => {
     setUnit(newUnit);
      if (userDocRef) {
-      setDocumentNonBlocking(userDocRef, { unit: newUnit }, { merge: true });
+      setDoc(userDocRef, { unit: newUnit }, { merge: true }).catch(error => {
+        console.error("Error updating unit:", error);
+      });
     }
   }
 
@@ -158,7 +164,7 @@ export default function DashboardPage() {
 
       <main className="grid grid-cols-1 gap-6 p-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 md:p-8">
         <div className="lg:col-span-2 xl:col-span-3">
-          <CurrentConditions data={weatherData.current} unit={unit} location={location} imageUrl={weatherData.imageUrl} />
+          <CurrentConditions data={weatherData.current} hourlyData={weatherData.hourlyForecast} unit={unit} location={location} />
         </div>
 
         <div className="lg:col-span-2 xl:col-span-2">
