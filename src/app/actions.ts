@@ -3,6 +3,7 @@
 
 import { generateWeatherSummary, type GenerateWeatherSummaryInput } from '@/ai/flows/generate-weather-summary';
 import { compareCities, type CompareCitiesInput } from '@/ai/flows/compare-cities-flow';
+import { PLACES_API_KEY } from '@/lib/config';
 
 export async function getSummary(input: GenerateWeatherSummaryInput): Promise<string> {
   try {
@@ -26,12 +27,12 @@ export async function getTravelRecommendation(input: CompareCitiesInput): Promis
 
 
 export async function getPlacePredictions(input: string) {
-  if (!process.env.NEXT_PUBLIC_PLACES_API_KEY) {
+  if (!PLACES_API_KEY) {
     console.error('Places API key is not configured.');
     return [];
   }
 
-  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&types=(cities)&key=${process.env.NEXT_PUBLIC_PLACES_API_KEY}`;
+  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&types=(cities)&key=${PLACES_API_KEY}`;
 
   try {
     const response = await fetch(url);
@@ -49,3 +50,4 @@ export async function getPlacePredictions(input: string) {
     return [];
   }
 }
+
