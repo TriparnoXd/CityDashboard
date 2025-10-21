@@ -33,18 +33,16 @@ type PlacePrediction = {
 
 export default function LocationSearch({ onLocationSelect, currentLocation }: LocationSearchProps) {
   const [open, setOpen] = React.useState(false)
-  const [inputValue, setInputValue] = React.useState("")
+  const [inputValue, setInputValue] = React.useState(currentLocation)
   const [predictions, setPredictions] = React.useState<PlacePrediction[]>([])
   const [loading, setLoading] = React.useState(false)
   
   const handleOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
     if (!isOpen) {
-      // When popover closes, reset predictions and input value
-      setPredictions([]);
-    } else {
-      // When popover opens, initialize input with the current location
+      // When popover closes, reset the input to the currently selected location
       setInputValue(currentLocation);
+      setPredictions([]);
     }
   };
 
