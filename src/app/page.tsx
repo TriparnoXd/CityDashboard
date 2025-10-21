@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -16,8 +17,7 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useToast } from "@/hooks/use-toast"
 import { LoaderCircle } from "lucide-react"
-import { useAuth, useUser } from "@/firebase"
-import { initiateEmailSignIn, initiateGoogleSignIn } from "@/firebase"
+import { useAuth, useUser, initiateEmailSignIn, initiateGoogleSignIn } from "@/firebase"
 
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -45,6 +45,7 @@ export default function LoginPage() {
 
 
   const handleSignIn = async () => {
+    if(!auth) return;
     setLoading('email');
     initiateEmailSignIn(auth, email, password);
     // The onAuthStateChanged listener in FirebaseProvider will handle the redirect
@@ -62,6 +63,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    if(!auth) return;
     setLoading('google');
     initiateGoogleSignIn(auth);
     // The onAuthStateChanged listener will handle redirection. We set a timeout
@@ -78,7 +80,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -120,7 +122,7 @@ export default function LoginPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-card px-2 text-muted-foreground">
                 Or continue with
               </span>
             </div>
@@ -129,7 +131,7 @@ export default function LoginPage() {
             {loading === 'google' ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              <GoogleIcon className="mr-2 h-4 w-4" />
+              <GoogleIcon className="mr-2 h-4 w-4 fill-current" />
             )}
             Sign in with Google
           </Button>

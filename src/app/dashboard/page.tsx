@@ -73,10 +73,13 @@ export default function DashboardPage() {
   React.useEffect(() => {
     const data = getWeatherData(location)
     setWeatherData(data)
-    if (userDocRef) {
-      setDocumentNonBlocking(userDocRef, { location }, { merge: true });
+    if (userDocRef && user?.uid) {
+       // When userData is null, it means the document doesn't exist yet.
+      // We need to include the uid for the 'create' operation to pass security rules.
+      const dataToSave = userData ? { location } : { location, uid: user.uid };
+      setDocumentNonBlocking(userDocRef, dataToSave, { merge: true });
     }
-  }, [location, userDocRef]);
+  }, [location, userDocRef, user?.uid, userData]);
 
   const handleLocationSelect = (newLocation: string) => {
     setLocation(newLocation);
@@ -90,6 +93,7 @@ export default function DashboardPage() {
   }
 
   const handleLogout = async () => {
+    if (!auth) return;
     await signOut(auth);
     router.push('/');
   }
@@ -106,7 +110,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm md:px-8">
         <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
-          City Pulse
+          Clear Sky
         </h1>
         <div className="flex items-center gap-4">
           <Select onValueChange={handleLocationSelect} value={location}>
