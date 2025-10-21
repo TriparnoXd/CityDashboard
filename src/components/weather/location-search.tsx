@@ -36,6 +36,14 @@ export default function LocationSearch({ onLocationSelect, currentLocation }: Lo
   const [inputValue, setInputValue] = React.useState(currentLocation)
   const [predictions, setPredictions] = React.useState<PlacePrediction[]>([])
   const [loading, setLoading] = React.useState(false)
+  
+  // Keep track of the current location from props to display it when the popover is closed.
+  React.useEffect(() => {
+    if (!open) {
+      setInputValue(currentLocation);
+    }
+  }, [currentLocation, open]);
+
 
   const handleInputChange = async (value: string) => {
     setInputValue(value)
@@ -58,15 +66,6 @@ export default function LocationSearch({ onLocationSelect, currentLocation }: Lo
     setOpen(false)
   }
 
-  // This effect ensures that if the parent component changes the location
-  // (e.g., on initial load from user profile), the input field reflects that change.
-  // It specifically checks if the new location is different to avoid unnecessary updates.
-  React.useEffect(() => {
-    if (currentLocation !== inputValue) {
-        setInputValue(currentLocation);
-    }
-  }, [currentLocation]);
-
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -77,7 +76,7 @@ export default function LocationSearch({ onLocationSelect, currentLocation }: Lo
           aria-expanded={open}
           className="w-[200px] justify-between sm:w-[250px]"
         >
-          <span className="truncate">{inputValue}</span>
+          <span className="truncate">{currentLocation}</span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
