@@ -26,7 +26,14 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherData }) => {
         dailyForecast: weatherData.dailyForecast,
         weatherAlerts: weatherData.weatherAlerts,
       });
-      setSummary(result);
+      // Simple markdown to HTML conversion
+      const formattedResult = result
+        .replace(/### (.*)/g, '<h3 class="font-semibold text-base mt-3 mb-1">$1</h3>')
+        .replace(/\* \*(.*)\* \*/g, '<strong>$1</strong>')
+        .replace(/^- (.*)/gm, '<li class="ml-4">$1</li>')
+        .replace(/(\r\n|\n|\r)/gm, '<br>')
+        .replace(/<br><li/g, '<li'); // Fix extra breaks before list items
+      setSummary(formattedResult);
     });
   };
 
@@ -40,7 +47,10 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherData }) => {
       </CardHeader>
       <CardContent className="space-y-4">
         {summary ? (
-          <div className="text-sm text-muted-foreground whitespace-pre-wrap">{summary}</div>
+          <div 
+            className="prose prose-sm text-muted-foreground"
+            dangerouslySetInnerHTML={{ __html: summary }}
+          />
         ) : (
           <p className="text-sm text-muted-foreground">
             Click the button to generate a concise, AI-powered summary of the weather forecast.
