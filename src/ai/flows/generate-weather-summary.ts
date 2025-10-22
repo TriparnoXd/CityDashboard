@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 import {z} from 'genkit';
 
 const GenerateWeatherSummaryInputSchema = z.object({
@@ -44,6 +45,7 @@ const generateWeatherSummaryPrompt = ai.definePrompt({
   name: 'generateWeatherSummaryPrompt',
   input: {schema: GenerateWeatherSummaryInputSchema},
   output: {schema: GenerateWeatherSummaryOutputSchema},
+  model: googleAI.model('gemini-1.5-flash-latest'),
   prompt: `Generate a weather summary based on the following data. Format the output using markdown with headings for "Now", "Next 24 Hours", and "Next 7 Days". Use bullet points for key details.
 
 Current Conditions:

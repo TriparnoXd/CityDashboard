@@ -10,6 +10,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 import {z} from 'genkit';
 
 // Tool to find flight information
@@ -80,6 +81,7 @@ const compareCitiesPrompt = ai.definePrompt({
   input: {schema: CompareCitiesInputSchema},
   output: {schema: CompareCitiesOutputSchema},
   tools: [findFlightsTool],
+  model: googleAI.model('gemini-1.5-flash-latest'),
   prompt: `You are a helpful and enthusiastic travel assistant. A user wants to know if traveling from {{cityA.name}} to {{cityB.name}} is a good idea based on the weather.
 
 Here is the weather for {{cityA.name}}:
