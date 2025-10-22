@@ -12,13 +12,14 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Map, ArrowRight, LoaderCircle, Sparkles, Calendar } from "lucide-react"
+import { Map, ArrowRight, LoaderCircle, Sparkles, Calendar, ExternalLink } from "lucide-react"
 import LocationSearch from "./location-search"
 import { getWeatherData, convertTemperature } from "@/lib/weather-data"
 import type { WeatherData, Unit } from "@/lib/types"
 import { getTravelRecommendation } from "@/app/actions"
 import WeatherIcon from "./weather-icon"
 import { Separator } from "../ui/separator"
+import type { CompareCitiesOutput } from "@/ai/flows/compare-cities-flow"
 
 interface CityCompareDialogProps {
     unit: Unit;
@@ -30,7 +31,7 @@ export default function CityCompareDialog({ unit }: CityCompareDialogProps) {
   const [cityB, setCityB] = React.useState<string | null>(null)
   const [weatherA, setWeatherA] = React.useState<WeatherData | null>(null)
   const [weatherB, setWeatherB] = React.useState<WeatherData | null>(null)
-  const [recommendation, setRecommendation] = React.useState<string>("")
+  const [result, setResult] = React.useState<CompareCitiesOutput | null>(null)
   const [isPending, startTransition] = React.useTransition()
 
   React.useEffect(() => {
@@ -62,10 +63,10 @@ export default function CityCompareDialog({ unit }: CityCompareDialogProps) {
             dailyForecast: weatherB.dailyForecast,
           },
         })
-        setRecommendation(result)
+        setResult(result);
       })
     } else {
-        setRecommendation("")
+        setResult(null);
     }
   }, [weatherA, weatherB, cityA, cityB])
   
@@ -74,7 +75,7 @@ export default function CityCompareDialog({ unit }: CityCompareDialogProps) {
     setCityB(null);
     setWeatherA(null);
     setWeatherB(null);
-    setRecommendation("");
+    setResult(null);
   }
 
 
@@ -105,14 +106,29 @@ export default function CityCompareDialog({ unit }: CityCompareDialogProps) {
             </div>
         )}
         
-        {!isPending && recommendation && (
+        {!isPending && result?.recommendation && (
             <Card>
                 <CardHeader className="flex-row items-center gap-2">
                     <Sparkles className="h-5 w-5 text-primary" />
                     <CardTitle className="text-base">AI Recommendation</CardTitle>
                 </CardHeader>
-                <CardContent>
-                    <p className="text-sm text-muted-foreground">{recommendation}</p>
+                <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">{result.recommendation}</p>
+                    {result.flightInfo && result.flightInfo.length > 0 && (
+                        <div>
+                            <h4 className="font-semibold text-sm mb-2">Check Flights:</h4>
+                            <div className="flex gap-2 flex-wrap">
+                                {result.flightInfo.map((flight, index) => (
+                                    <Button key={index} variant="outline" size="sm" asChild>
+                                        <a href={flight.url} target="_blank" rel="noopener noreferrer">
+                                            {flight.source}
+                                            <ExternalLink className="ml-2 h-3 w-3" />
+                                        </a>
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
         )}

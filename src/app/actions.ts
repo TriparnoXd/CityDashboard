@@ -2,7 +2,7 @@
 "use server";
 
 import { generateWeatherSummary, type GenerateWeatherSummaryInput } from '@/ai/flows/generate-weather-summary';
-import { compareCities, type CompareCitiesInput } from '@/ai/flows/compare-cities-flow';
+import { compareCities, type CompareCitiesInput, type CompareCitiesOutput } from '@/ai/flows/compare-cities-flow';
 import { PLACES_API_KEY } from '@/lib/config';
 
 export async function getSummary(input: GenerateWeatherSummaryInput): Promise<string> {
@@ -15,13 +15,16 @@ export async function getSummary(input: GenerateWeatherSummaryInput): Promise<st
   }
 }
 
-export async function getTravelRecommendation(input: CompareCitiesInput): Promise<string> {
+export async function getTravelRecommendation(input: CompareCitiesInput): Promise<CompareCitiesOutput> {
   try {
     const result = await compareCities(input);
-    return result.recommendation;
+    return result;
   } catch (error) {
     console.error("Error generating travel recommendation:", error);
-    return "I'm sorry, but I was unable to generate a travel recommendation at this time. Please try again later.";
+    return {
+        recommendation: "I'm sorry, but I was unable to generate a travel recommendation at this time. Please try again later.",
+        flightInfo: [],
+    };
   }
 }
 
