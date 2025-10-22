@@ -54,7 +54,7 @@ Follow these instructions to set up and run the project on your local machine.
     NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_firebase_project_id
     
     PLACES_API_KEY=your_google_places_api_key
-    GEMINI_API_KEY=your_ai_api_key
+    GOOGLE_AI_API_KEY=your_ai_api_key
     ```
 
 4.  **Run the development server:**
