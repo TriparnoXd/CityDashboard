@@ -551,10 +551,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 async function getSummary(input) {
     try {
         const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$ai$2f$flows$2f$generate$2d$weather$2d$summary$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generateWeatherSummary"])(input);
-        return result.summary;
+        return result;
     } catch (error) {
         console.error("Error generating weather summary:", error);
-        return "I'm sorry, but I was unable to generate a weather summary at this time. Please try again later.";
+        return {
+            summary: "I'm sorry, but I was unable to generate a weather summary at this time. Please try again later."
+        };
     }
 }
 async function getTravelRecommendation(input) {
