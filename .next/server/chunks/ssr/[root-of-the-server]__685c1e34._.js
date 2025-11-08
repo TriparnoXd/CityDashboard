@@ -3387,7 +3387,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$b
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-ssr] (ecmascript) <export default as Sparkles>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__LoaderCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/loader-circle.js [app-ssr] (ecmascript) <export default as LoaderCircle>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$data$3a$d130b9__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__ = __turbopack_context__.i("[project]/src/app/data:d130b9 [app-ssr] (ecmascript) <text/javascript>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$marked$2f$lib$2f$marked$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/marked/lib/marked.esm.js [app-ssr] (ecmascript)");
 "use client";
+;
 ;
 ;
 ;
@@ -3408,9 +3410,9 @@ const WeatherSummary = ({ weatherData })=>{
                 dailyForecast: weatherData.dailyForecast,
                 weatherAlerts: weatherData.weatherAlerts
             });
-            // Simple markdown to HTML conversion
-            const formattedResult = result.replace(/### (.*)/g, '<h3 class="font-semibold text-base mt-3 mb-1">$1</h3>').replace(/\* \*(.*)\* \*/g, '<strong>$1</strong>').replace(/^- (.*)/gm, '<li class="ml-4">$1</li>').replace(/(\r\n|\n|\r)/gm, '<br>').replace(/<br><li/g, '<li'); // Fix extra breaks before list items
-            setSummary(formattedResult);
+            // Use a proper markdown parser
+            const unsafeHtml = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$marked$2f$lib$2f$marked$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["marked"].parse(result);
+            setSummary(unsafeHtml);
         });
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -3424,39 +3426,39 @@ const WeatherSummary = ({ weatherData })=>{
                             className: "h-5 w-5 text-muted-foreground"
                         }, void 0, false, {
                             fileName: "[project]/src/components/weather/weather-summary.tsx",
-                            lineNumber: 44,
+                            lineNumber: 40,
                             columnNumber: 11
                         }, this),
                         "AI Weather Summary"
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/weather/weather-summary.tsx",
-                    lineNumber: 43,
+                    lineNumber: 39,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/weather/weather-summary.tsx",
-                lineNumber: 42,
+                lineNumber: 38,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
                 className: "space-y-4",
                 children: [
                     summary ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "prose prose-sm text-muted-foreground",
+                        className: "prose prose-sm dark:prose-invert text-muted-foreground max-w-none [&_h3]:font-semibold [&_h3]:text-base [&_h3]:mt-3 [&_h3]:mb-1",
                         dangerouslySetInnerHTML: {
                             __html: summary
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/components/weather/weather-summary.tsx",
-                        lineNumber: 50,
+                        lineNumber: 46,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-sm text-muted-foreground",
                         children: "Click the button to generate a concise, AI-powered summary of the weather forecast."
                     }, void 0, false, {
                         fileName: "[project]/src/components/weather/weather-summary.tsx",
-                        lineNumber: 55,
+                        lineNumber: 51,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3468,32 +3470,32 @@ const WeatherSummary = ({ weatherData })=>{
                                 className: "mr-2 h-4 w-4 animate-spin"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/weather/weather-summary.tsx",
-                                lineNumber: 61,
+                                lineNumber: 57,
                                 columnNumber: 13
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
                                 className: "mr-2 h-4 w-4"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/weather/weather-summary.tsx",
-                                lineNumber: 63,
+                                lineNumber: 59,
                                 columnNumber: 13
                             }, this),
                             isPending ? 'Generating...' : 'Generate Summary'
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/weather/weather-summary.tsx",
-                        lineNumber: 59,
+                        lineNumber: 55,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/weather/weather-summary.tsx",
-                lineNumber: 48,
+                lineNumber: 44,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/weather/weather-summary.tsx",
-        lineNumber: 41,
+        lineNumber: 37,
         columnNumber: 5
     }, this);
 };

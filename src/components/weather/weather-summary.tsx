@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, LoaderCircle } from 'lucide-react';
 import type { WeatherData } from '@/lib/types';
 import { getSummary } from '@/app/actions';
+import { marked } from 'marked';
 
 interface WeatherSummaryProps {
   weatherData: WeatherData;
@@ -26,14 +27,9 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherData }) => {
         dailyForecast: weatherData.dailyForecast,
         weatherAlerts: weatherData.weatherAlerts,
       });
-      // Simple markdown to HTML conversion
-      const formattedResult = result
-        .replace(/### (.*)/g, '<h3 class="font-semibold text-base mt-3 mb-1">$1</h3>')
-        .replace(/\* \*(.*)\* \*/g, '<strong>$1</strong>')
-        .replace(/^- (.*)/gm, '<li class="ml-4">$1</li>')
-        .replace(/(\r\n|\n|\r)/gm, '<br>')
-        .replace(/<br><li/g, '<li'); // Fix extra breaks before list items
-      setSummary(formattedResult);
+      // Use a proper markdown parser
+      const unsafeHtml = await marked.parse(result);
+      setSummary(unsafeHtml);
     });
   };
 
@@ -48,7 +44,7 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherData }) => {
       <CardContent className="space-y-4">
         {summary ? (
           <div 
-            className="prose prose-sm text-muted-foreground"
+            className="prose prose-sm dark:prose-invert text-muted-foreground max-w-none [&_h3]:font-semibold [&_h3]:text-base [&_h3]:mt-3 [&_h3]:mb-1"
             dangerouslySetInnerHTML={{ __html: summary }}
           />
         ) : (
