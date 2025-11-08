@@ -2954,6 +2954,14 @@ body {
   border-bottom-width: 1px;
 }
 
+.\[\&_ul\]\:list-disc ul {
+  list-style-type: disc;
+}
+
+.\[\&_ul\]\:pl-4 ul {
+  padding-left: 1rem;
+}
+
 [data-side="left"][data-collapsible="offcanvas"] .\[\[data-side\=left\]\[data-collapsible\=offcanvas\]_\&\]\:-right-2 {
   right: -.5rem;
 }

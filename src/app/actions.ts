@@ -1,17 +1,19 @@
 
 "use server";
 
-import { generateWeatherSummary, type GenerateWeatherSummaryInput } from '@/ai/flows/generate-weather-summary';
+import { generateWeatherSummary, type GenerateWeatherSummaryInput, type GenerateWeatherSummaryOutput } from '@/ai/flows/generate-weather-summary';
 import { compareCities, type CompareCitiesInput, type CompareCitiesOutput } from '@/ai/flows/compare-cities-flow';
 import { PLACES_API_KEY } from '@/lib/config';
 
-export async function getSummary(input: GenerateWeatherSummaryInput): Promise<string> {
+export async function getSummary(input: GenerateWeatherSummaryInput): Promise<GenerateWeatherSummaryOutput> {
   try {
     const result = await generateWeatherSummary(input);
-    return result.summary;
+    return result;
   } catch (error) {
     console.error("Error generating weather summary:", error);
-    return "I'm sorry, but I was unable to generate a weather summary at this time. Please try again later.";
+    return {
+        summary: "I'm sorry, but I was unable to generate a weather summary at this time. Please try again later."
+    };
   }
 }
 

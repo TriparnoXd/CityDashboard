@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useState, useTransition } from 'react';
@@ -28,7 +29,7 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherData }) => {
         weatherAlerts: weatherData.weatherAlerts,
       });
       // Use a proper markdown parser
-      const unsafeHtml = await marked.parse(result);
+      const unsafeHtml = await marked.parse(result.summary);
       setSummary(unsafeHtml);
     });
   };
@@ -44,7 +45,7 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherData }) => {
       <CardContent className="space-y-4">
         {summary ? (
           <div 
-            className="prose prose-sm dark:prose-invert text-muted-foreground max-w-none [&_h3]:font-semibold [&_h3]:text-base [&_h3]:mt-3 [&_h3]:mb-1"
+            className="prose prose-sm dark:prose-invert text-muted-foreground max-w-none [&_h3]:font-semibold [&_h3]:text-base [&_h3]:mt-3 [&_h3]:mb-1 [&_ul]:list-disc [&_ul]:pl-4"
             dangerouslySetInnerHTML={{ __html: summary }}
           />
         ) : (
